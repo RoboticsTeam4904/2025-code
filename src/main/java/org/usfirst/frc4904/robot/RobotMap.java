@@ -20,9 +20,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SerialPort;
 import java.io.File;
-import org.usfirst.frc4904.robot.subsystems.MultiMotorSubsystem;
-import org.usfirst.frc4904.robot.subsystems.OrchestraSubsystem;
-import org.usfirst.frc4904.robot.subsystems.SingleMotorSubsystem;
 import org.usfirst.frc4904.robot.subsystems.SwerveSubsystem;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandXbox;
@@ -40,8 +37,7 @@ public class RobotMap {
 
         public static class HumanInput {
 
-            public static final int xyJoystickPort = 0;
-            public static final int zJoystickPort = 1;
+            public static final int xbox = 1;
             public static final int joystick = 2;
         }
 
@@ -56,10 +52,6 @@ public class RobotMap {
             public static final int BACK_LEFT_TURN = 7;
             public static final int BACK_RIGHT_DRIVE = 4;
             public static final int BACK_RIGHT_TURN = 8;
-            public static final int RAMP = -1;
-            public static final int INTAKE = -1;
-            public static final int ELEVATOR_MOTOR_ONE = -1;
-            public static final int ELEVATOR_MOTOR_TWO = -1;
         }
 
         public static class PWM {
@@ -157,15 +149,6 @@ public class RobotMap {
         // public static RobotUDP robotUDP;
         //Subsystems
         public static SwerveSubsystem chassis;
-        public static SingleMotorSubsystem ramp;
-        public static SingleMotorSubsystem intake;
-        public static MultiMotorSubsystem elevator;
-        //Motor time
-        public static CANTalonFX rampMotor;
-        public static CANTalonFX intakeMotor;
-        public static CANTalonFX elevatorMotorOne;
-        public static CANTalonFX elevatorMotorTwo;
-        public static OrchestraSubsystem orchestra;
     }
 
     public static class NetworkTables {
@@ -195,8 +178,6 @@ public class RobotMap {
         public static class Driver {
 
             public static CustomCommandXbox xbox;
-            public static CustomCommandJoystick xyJoystick;
-            public static CustomCommandJoystick turnJoystick;
         }
 
         public static class Operator {
@@ -206,33 +187,16 @@ public class RobotMap {
     }
 
     public RobotMap() {
-        Component.orchestra = new OrchestraSubsystem();
         Component.chassis = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory(), "swerve"),
             360,
             0.0473,
             4.5
         );
-        Component.rampMotor = new CANTalonFX(Port.CANMotor.RAMP);
-        Component.ramp = new SingleMotorSubsystem(Component.rampMotor, 1);
-
-        Component.intakeMotor = new CANTalonFX(Port.CANMotor.INTAKE);
-        Component.intake = new SingleMotorSubsystem(Component.intakeMotor, 1);
         // Component.navx = new AHRS(SerialPort.Port.kMXP);
 
-        HumanInput.Driver.xyJoystick = new CustomCommandJoystick(
-            Port.HumanInput.xyJoystickPort,
-            0.01
-        );
-        HumanInput.Driver.turnJoystick = new CustomCommandJoystick(
-            Port.HumanInput.zJoystickPort,
-            0.01
-        );
-        Component.elevator = new MultiMotorSubsystem(
-            new CANTalonFX[] { Component.elevatorMotorOne, Component.elevatorMotorTwo },
-            new double[] { 1, -1 },
-            1
-        );
+        HumanInput.Driver.xbox = new CustomCommandXbox(Port.HumanInput.xbox, 0.01);
+
         // HumanInput.Operator.joystick = new CustomCommandJoystick(Port.HumanInput.joystick, 0.01);
         // // // UDP things
         // // try {
@@ -248,13 +212,13 @@ public class RobotMap {
 
         // //TODO: fix invert type, talk to anna
 
-        Component.FLdrive  = new CANTalonFX(Port.CANMotor.FRONT_LEFT_DRIVE);
+        Component.FLdrive = new CANTalonFX(Port.CANMotor.FRONT_LEFT_DRIVE);
         // Component.FLturn = new CustomCANSparkMax(Port.CANMotor.FRONT_LEFT_TURN, MotorType.kBrushless, false);
-        Component.FRdrive  = new CANTalonFX(Port.CANMotor.FRONT_RIGHT_DRIVE);
+        Component.FRdrive = new CANTalonFX(Port.CANMotor.FRONT_RIGHT_DRIVE);
         // Component.FRturn = new CustomCANSparkMax(Port.CANMotor.FRONT_RIGHT_TURN, MotorType.kBrushless, false);
-        Component.BLdrive  = new CANTalonFX(Port.CANMotor.BACK_LEFT_DRIVE);
+        Component.BLdrive = new CANTalonFX(Port.CANMotor.BACK_LEFT_DRIVE);
         // Component.BLturn = new CustomCANSparkMax(Port.CANMotor.BACK_LEFT_TURN, MotorType.kBrushless, false);
-        Component.BRdrive  = new CANTalonFX(Port.CANMotor.BACK_RIGHT_DRIVE);
+        Component.BRdrive = new CANTalonFX(Port.CANMotor.BACK_RIGHT_DRIVE);
         // Component.BRturn = new CustomCANSparkMax(Port.CANMotor.BACK_RIGHT_TURN, MotorType.kBrushless, false);
 
         // // Component.backRightWheelTalon.setSafetyEnabled(false);

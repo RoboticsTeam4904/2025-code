@@ -76,10 +76,10 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void teleopExecute() {
-        SmartDashboard.putBoolean(
-            "button",
-            RobotMap.HumanInput.Driver.turnJoystick.button1.getAsBoolean()
-        );
+        // SmartDashboard.putBoolean(
+        //     "button",
+        //     RobotMap.HumanInput.Driver.turnJoystick.button1.getAsBoolean()
+        // );
         SmartDashboard.putNumber(
             "max angular velocity",
             RobotMap.Component.chassis.swerveDrive.getMaximumChassisAngularVelocity()
