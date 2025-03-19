@@ -9,7 +9,6 @@ import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion.SetpointSu
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class ezMotion extends Command {
@@ -24,13 +23,13 @@ public class ezMotion extends Command {
     public Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer;
     public SetpointSupplier<Pair<Double, Double>> setpointDealer = null;
 
-    public Command onArrival;
+    public boolean finishOnArrival;
     
     public ezMotion(ezControl control, 
                     DoubleSupplier feedback, 
                     DoubleConsumer processVariable, 
                     Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer, 
-                    Command onArrival, 
+                    boolean finishOnArrival,
                     Subsystem... requirements) {
 
         addRequirements(requirements);
@@ -38,22 +37,22 @@ public class ezMotion extends Command {
         this.processVariable = processVariable;
         this.feedback = feedback;
         this.setpointDealerDealer = setpointDealerDealer;
-        this.onArrival = onArrival != null? (onArrival) : (new InstantCommand(() -> {}));
+        this.finishOnArrival = finishOnArrival;
     }
 
     public ezMotion(ezControl control, 
                     DoubleSupplier feedback, DoubleConsumer processVariable, 
                     Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer, 
                     Subsystem... requirements) 
-    { this(control, feedback, processVariable, setpointDealerDealer, new InstantCommand(() -> {}), requirements); }
+    { this(control, feedback, processVariable, setpointDealerDealer, true, requirements); }
 
     public ezMotion(ezControl control, 
                     DoubleSupplier feedback, 
                     DoubleConsumer processVariable, 
-                    SetpointSupplier<Pair<Double, Double>> setpointDealer, 
-                    Command onArrival, 
+                    SetpointSupplier<Pair<Double, Double>> setpointDealer,
+                    boolean finishOnArrival,
                     Subsystem... requirements) 
-    { this(control, feedback, processVariable, () -> setpointDealer, onArrival, requirements); }
+    { this(control, feedback, processVariable, () -> setpointDealer, finishOnArrival, requirements); }
 
     public ezMotion(ezControl control, 
                     DoubleSupplier feedback, 
@@ -76,16 +75,22 @@ public class ezMotion extends Command {
         this.initialTimestamp = Timer.getFPGATimestamp();
     }
 
+    private boolean finished = false;
+
     @Override
     public void execute() {
-        Pair<Double, Double> setpoints;
+        finished = false;
+
         try {
-            setpoints = this.setpointDealer.apply(getElapsedTime());
+            Pair<Double, Double> setpoints = this.setpointDealer.apply(getElapsedTime());
             setpoint = setpoints.getFirst();
             setpoint_dt = setpoints.getSecond();
-
         } catch (EndSignal e) {
-            onArrival.schedule();
+            finished = true;
+        }
+
+        if (control.atSetpoint()) {
+            finished = true;
         }
 
         control.updateSetpoint(setpoint, setpoint_dt);
@@ -94,12 +99,12 @@ public class ezMotion extends Command {
     }
 
     @Override
-    public boolean isFinished() { return false; }
+    public boolean isFinished() { return finishOnArrival && finished; }
 
     @FunctionalInterface
     public interface SetpointSupplier<R> {
-        public class EndSignal extends Throwable {}
+        class EndSignal extends Throwable {}
         
-        public R apply(double num) throws EndSignal;
+        R apply(double num) throws EndSignal;
     }
 }

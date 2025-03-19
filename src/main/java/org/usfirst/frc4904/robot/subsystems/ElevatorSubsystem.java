@@ -194,8 +194,10 @@ public class ElevatorSubsystem extends MultiMotorSubsystem {
     }
 
     public Command c_gotoHeight(double height) {
-        ezControl controller = new ezControl(kP, kI, kD, (position, velocityMetersPerSec) ->
-            this.feedforward.calculate(velocityMetersPerSec)
+        ezControl controller = new ezControl(
+            kP, kI, kD,
+            (position, velocityMetersPerSec) -> this.feedforward.calculate(velocityMetersPerSec),
+            0.02
         );
 
         TrapezoidProfile profile = new TrapezoidProfile(
@@ -221,14 +223,9 @@ public class ElevatorSubsystem extends MultiMotorSubsystem {
         return new ezMotion(
             controller,
             this::getHeight,
-            (double volts) -> {
-                SmartDashboard.putNumber("Elevator volts", volts);
-                this.setVoltage(volts);
-            },
+            this::setVoltage,
             (double t) -> {
                 TrapezoidProfile.State result = profile.calculate(t, current, goal);
-
-                SmartDashboard.putNumber("deg setpoint", result.velocity);
                 return new Pair<>(result.position, result.velocity);
             },
             this

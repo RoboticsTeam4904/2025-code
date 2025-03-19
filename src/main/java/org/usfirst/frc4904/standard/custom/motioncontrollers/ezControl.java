@@ -11,7 +11,13 @@ public class ezControl implements BiFunction<Double, Double, Double> {
     private double setpoint_dt;
 
     public ezControl(double kP, double kI, double kD, ezFeedForward F) {
+        // 0.05 = default setpoint error tolerance
+        this(kP, kI, kD, F, 0.05);
+    }
+
+    public ezControl(double kP, double kI, double kD, ezFeedForward F, double errorTolerance) {
         this.controller = new ezControlMethod(new PIDController(kP, kI, kD), F);
+        this.controller.pid.setTolerance(errorTolerance, 1);
     }
 
     public boolean atSetpoint() {
@@ -55,19 +61,7 @@ public class ezControl implements BiFunction<Double, Double, Double> {
         return calculate(measurement, elapsedPeriod);
     }
 
-    // VERY TEMPTED
-    public class ezControlState extends TrapezoidProfile.State {}
-
-    // OK maybe a bit bad but technically good practice and I'm putting it in here anyways
-    public class ezControlMethod {
-        public final PIDController pid;
-        public final ezFeedForward F;
-
-        public ezControlMethod(PIDController pid, ezFeedForward F) {
-            this.pid = pid;
-            this.F = F;
-        }
-    }
+    public record ezControlMethod(PIDController pid, ezFeedForward F) {}
 
     public ezControlMethod getControl() {
         return this.controller;
