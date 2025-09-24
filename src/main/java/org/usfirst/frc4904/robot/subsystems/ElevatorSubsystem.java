@@ -12,8 +12,6 @@ import java.util.function.DoubleSupplier;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.commands.NoOp;
 import org.usfirst.frc4904.standard.custom.CustomEncoder;
-import org.usfirst.frc4904.standard.custom.motioncontrollers.ezControl;
-import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class ElevatorSubsystem extends MultiMotorSubsystem {
