@@ -1,9 +1,8 @@
 package org.usfirst.frc4904.standard.custom.motioncontrollers;
 
-import java.util.function.BiFunction;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
+import java.util.function.BiFunction;
 
 public class ezControl implements BiFunction<Double, Double, Double> {
     private final ezControlMethod controller;
@@ -11,13 +10,21 @@ public class ezControl implements BiFunction<Double, Double, Double> {
     private double setpoint_dt;
 
     public ezControl(double kP, double kI, double kD, ezFeedForward F) {
+        this(new PIDController(kP, kI, kD), F);
+    }
+
+    public ezControl(PIDController pid, ezFeedForward F) {
         // 0.05 = default setpoint error tolerance
-        this(kP, kI, kD, F, 0.05);
+        this(pid, F, 0.05);
     }
 
     public ezControl(double kP, double kI, double kD, ezFeedForward F, double errorTolerance) {
-        this.controller = new ezControlMethod(new PIDController(kP, kI, kD), F);
-        this.controller.pid.setTolerance(errorTolerance, 1);
+        this(new PIDController(kP, kI, kD), F, errorTolerance);
+    }
+
+    public ezControl(PIDController pid, ezFeedForward F, double errorTolerance) {
+        pid.setTolerance(errorTolerance, 1);
+        this.controller = new ezControlMethod(pid, F);
     }
 
     public boolean atSetpoint() {
