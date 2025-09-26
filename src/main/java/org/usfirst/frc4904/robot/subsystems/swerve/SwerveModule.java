@@ -1,4 +1,4 @@
-package org.usfirst.frc4904.robot.subsystems;
+package org.usfirst.frc4904.robot.subsystems.swerve;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
@@ -14,11 +14,11 @@ import org.usfirst.frc4904.standard.custom.motioncontrollers.ezControl;
 import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
-public class CustomModule {
+public class SwerveModule {
     private final MoveController move;
     private final RotationController rotation;
 
-    public CustomModule(
+    public SwerveModule(
         SmartMotorController moveMotor,
         SmartMotorController rotMotor,
         DutyCycleEncoder rotEncoder,
