@@ -18,11 +18,12 @@ class SwerveConstants {
 
     // m/s
     public static final double LIN_SPEED = RPM / 60.0 / GEAR_RATIO * (2 * Math.PI * WHEEL_RADIUS);
-    // public static final double LIN_ACCEL = LIN_SPEED * 10;
-
     // turns/s
     public static final double ROT_SPEED = LIN_SPEED / (Math.PI * ROBOT_DIAGONAL);
-    public static final double ROT_ACCEL = ROT_SPEED * 10;
+
+    // TODO: get real measurements
+    public static final double ROT_MOTOR_SPEED = 5;
+    public static final double ROT_MOTOR_ACCEL = ROT_MOTOR_SPEED * 10;
 
     public static final double MOTOR_VOLTS = 12;
 }
