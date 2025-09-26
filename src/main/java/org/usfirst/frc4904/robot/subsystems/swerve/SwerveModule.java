@@ -15,16 +15,16 @@ import org.usfirst.frc4904.standard.custom.motioncontrollers.ezMotion;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class SwerveModule {
-    private final MoveController move;
+    private final DriveController drive;
     private final RotationController rotation;
 
     public SwerveModule(
-        SmartMotorController moveMotor,
+        SmartMotorController driveMotor,
         SmartMotorController rotMotor,
         DutyCycleEncoder rotEncoder,
         Translation2d direction
     ) {
-        move = new MoveController(moveMotor);
+        drive = new DriveController(driveMotor);
         rotation = new RotationController(rotMotor, rotEncoder, direction);
     }
 
@@ -35,13 +35,13 @@ public class SwerveModule {
 
     public Command c_moveTo(double magnitude, double theta) {
         return new ParallelCommandGroup(
-            move.c_setMagnitude(magnitude),
+            drive.c_setMagnitude(magnitude),
             rotation.c_gotoRotation(theta)
         );
     }
 }
 
-record MoveController(SmartMotorController motor) {
+record DriveController(SmartMotorController motor) {
 
     public Command c_setMagnitude(double magnitude) {
         return new RunCommand(() ->
@@ -97,12 +97,11 @@ class RotationController {
 
         ezControl controller = new ezControl(
             pid,
-            (pos, mPerSec) -> this.ff.calculate(mPerSec),
-            0.02
+            (pos, mPerSec) -> this.ff.calculate(mPerSec)
         );
 
         TrapezoidProfile profile = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(SwerveConstants.ROT_SPEED, SwerveConstants.ROT_ACCEL)
+            new TrapezoidProfile.Constraints(SwerveConstants.ROT_MOTOR_SPEED, SwerveConstants.ROT_MOTOR_ACCEL)
         );
 
         return getEzMotion(
@@ -113,7 +112,7 @@ class RotationController {
         );
     }
 
-    private double getRotation() { // TODO doesn't handle 1->0 jumps
+    private double getRotation() {
         return encoder.get();
     }
 
@@ -143,4 +142,3 @@ class RotationController {
         };
     }
 }
-
