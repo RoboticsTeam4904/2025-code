@@ -1,4 +1,4 @@
-package org.usfirst.frc4904.robot.subsystems;
+package org.usfirst.frc4904.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,10 +27,10 @@ class SwerveConstants {
     public static final double MOTOR_VOLTS = 12;
 }
 
-public class CustomSwerve extends SubsystemBase {
-    private final CustomModule[] modules;
+public class SwerveSubsystem extends SubsystemBase {
+    private final SwerveModule[] modules;
 
-    public CustomSwerve(CustomModule... modules) {
+    public SwerveSubsystem(SwerveModule... modules) {
         this.modules = modules;
     }
 
