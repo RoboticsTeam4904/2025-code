@@ -9,22 +9,17 @@ public class ezControl implements BiFunction<Double, Double, Double> {
     private double setpoint;
     private double setpoint_dt;
 
+    public ezControl(double kP, double kI, double kD, ezFeedForward F, double errorTolerance) {
+        this(kP, kI, kD, F);
+        controller.pid.setTolerance(errorTolerance, 1);
+    }
+
     public ezControl(double kP, double kI, double kD, ezFeedForward F) {
         this(new PIDController(kP, kI, kD), F);
     }
 
     public ezControl(PIDController pid, ezFeedForward F) {
-        // 0.05 = default setpoint error tolerance
-        this(pid, F, 0.05);
-    }
-
-    public ezControl(double kP, double kI, double kD, ezFeedForward F, double errorTolerance) {
-        this(new PIDController(kP, kI, kD), F, errorTolerance);
-    }
-
-    public ezControl(PIDController pid, ezFeedForward F, double errorTolerance) {
-        pid.setTolerance(errorTolerance, 1);
-        this.controller = new ezControlMethod(pid, F);
+        controller = new ezControlMethod(pid, F);
     }
 
     public boolean atSetpoint() {
