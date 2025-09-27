@@ -32,7 +32,6 @@ public class SwerveModule {
         return rotation.toTranslation(theta);
     }
 
-
     public Command c_moveTo(double magnitude, double theta) {
         return new ParallelCommandGroup(
             drive.c_setMagnitude(magnitude),
@@ -42,6 +41,7 @@ public class SwerveModule {
 }
 
 record DriveController(SmartMotorController motor) {
+    // TODO use FF + P (no ID)
 
     public Command c_setMagnitude(double magnitude) {
         return new RunCommand(() ->
@@ -53,6 +53,8 @@ record DriveController(SmartMotorController motor) {
 }
 
 class RotationController {
+    // TODO use P (no FF or ID)
+
     // TODO tune
     private static final double kP = 5;
     private static final double kI = 0;
@@ -103,6 +105,8 @@ class RotationController {
         TrapezoidProfile profile = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(SwerveConstants.ROT_MOTOR_SPEED, SwerveConstants.ROT_MOTOR_ACCEL)
         );
+
+        // TODO run wheel backwards if opposite direction is closer
 
         return getEzMotion(
             controller,

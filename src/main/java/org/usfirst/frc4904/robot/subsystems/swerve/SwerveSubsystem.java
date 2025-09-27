@@ -43,6 +43,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Translation2d robotRelative(Translation2d translation) {
+        // TODO account for alliance direction
         float rotation = Component.navx.getYaw();
         return translation.rotateBy(Rotation2d.fromDegrees(-rotation)); // TODO MAYBE WRONG
     }
