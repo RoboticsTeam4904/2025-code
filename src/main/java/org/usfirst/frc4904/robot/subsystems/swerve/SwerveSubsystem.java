@@ -53,22 +53,22 @@ public class SwerveSubsystem extends SubsystemBase {
         double maxMag = SwerveConstants.LIN_SPEED;
 
         for (int i = 0; i < modules.length; i++) {
-            Translation2d rotTrns = modules[i].rotToTranslation(theta);
-            Translation2d modTrns = translation.plus(rotTrns);
+            Translation2d rotation = modules[i].rotToTranslation(theta);
+            Translation2d sum = translation.plus(rotation);
 
-            translations[i] = modTrns;
-            maxMag = Math.max(modTrns.getNorm(), maxMag);
+            translations[i] = sum;
+            maxMag = Math.max(sum.getNorm(), maxMag);
         }
 
         double norm = maxMag / SwerveConstants.LIN_SPEED;
         Command[] commands = new Command[modules.length];
 
         for (int i = 0; i < modules.length; i++) {
-            Translation2d modTrns = translations[i].div(norm);
+            Translation2d normalized = translations[i].div(norm);
 
             commands[i] = modules[i].c_moveTo(
-                modTrns.getNorm(),
-                modTrns.getAngle().getRotations()
+                normalized.getNorm(),
+                normalized.getAngle().getRotations()
             );
         }
 

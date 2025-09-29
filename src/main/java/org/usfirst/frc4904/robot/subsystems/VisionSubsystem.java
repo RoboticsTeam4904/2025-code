@@ -113,8 +113,8 @@ public class VisionSubsystem extends SubsystemBase {
 
         // initialize pid controllers
         // TODO TUNING: tune pid values
-        positionController = new PIDController(1, 0.0, 0.0);
-        rotationController = new PIDController(1, 0.0, 0.0);
+        positionController = new PIDController(1, 0, 0);
+        rotationController = new PIDController(1, 0, 0);
 
         // make rotation controller continuous
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
