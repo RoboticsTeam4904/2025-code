@@ -18,6 +18,10 @@ public class ezControl implements BiFunction<Double, Double, Double> {
         this(new PIDController(kP, kI, kD), F);
     }
 
+    public ezControl(PIDController pid) {
+        this(pid, (pos, mPerSec) -> 0.0);
+    }
+
     public ezControl(PIDController pid, ezFeedForward F) {
         controller = new ezControlMethod(pid, F);
     }

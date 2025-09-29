@@ -24,11 +24,11 @@ public class ezMotion extends Command {
     public SetpointSupplier<Pair<Double, Double>> setpointDealer = null;
 
     public boolean finishOnArrival;
-    
-    public ezMotion(ezControl control, 
-                    DoubleSupplier feedback, 
-                    DoubleConsumer processVariable, 
-                    Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer, 
+
+    public ezMotion(ezControl control,
+                    DoubleSupplier feedback,
+                    DoubleConsumer processVariable,
+                    Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer,
                     boolean finishOnArrival,
                     Subsystem... requirements) {
 
@@ -40,25 +40,25 @@ public class ezMotion extends Command {
         this.finishOnArrival = finishOnArrival;
     }
 
-    public ezMotion(ezControl control, 
-                    DoubleSupplier feedback, DoubleConsumer processVariable, 
-                    Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer, 
-                    Subsystem... requirements) 
+    public ezMotion(ezControl control,
+                    DoubleSupplier feedback, DoubleConsumer processVariable,
+                    Supplier<SetpointSupplier<Pair<Double, Double>>> setpointDealerDealer,
+                    Subsystem... requirements)
     { this(control, feedback, processVariable, setpointDealerDealer, true, requirements); }
 
-    public ezMotion(ezControl control, 
-                    DoubleSupplier feedback, 
-                    DoubleConsumer processVariable, 
+    public ezMotion(ezControl control,
+                    DoubleSupplier feedback,
+                    DoubleConsumer processVariable,
                     SetpointSupplier<Pair<Double, Double>> setpointDealer,
                     boolean finishOnArrival,
-                    Subsystem... requirements) 
+                    Subsystem... requirements)
     { this(control, feedback, processVariable, () -> setpointDealer, finishOnArrival, requirements); }
 
-    public ezMotion(ezControl control, 
-                    DoubleSupplier feedback, 
-                    DoubleConsumer processVariable, 
-                    SetpointSupplier<Pair<Double, Double>> setpointDealer, 
-                    Subsystem... requirements) 
+    public ezMotion(ezControl control,
+                    DoubleSupplier feedback,
+                    DoubleConsumer processVariable,
+                    SetpointSupplier<Pair<Double, Double>> setpointDealer,
+                    Subsystem... requirements)
     { this(control, feedback, processVariable, () -> setpointDealer, requirements); }
 
     public double getElapsedTime() {
@@ -103,7 +103,7 @@ public class ezMotion extends Command {
     @FunctionalInterface
     public interface SetpointSupplier<R> {
         class EndSignal extends Throwable {}
-        
+
         R apply(double num) throws EndSignal;
     }
 }
