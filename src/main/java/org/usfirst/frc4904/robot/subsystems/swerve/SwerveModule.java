@@ -3,11 +3,6 @@ package org.usfirst.frc4904.robot.subsystems.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import org.usfirst.frc4904.standard.commands.CreateOnInitialize;
-import org.usfirst.frc4904.standard.custom.motioncontrollers.ezPID;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class SwerveModule {
@@ -28,19 +23,15 @@ public class SwerveModule {
         return rotation.toTranslation(theta);
     }
 
-    public Command c_moveTo(double magnitude, double theta) {
-        return new ParallelCommandGroup(
-            drive.c_setMagnitude(magnitude),
-            rotation.c_gotoRotation(theta)
-        );
+    public void moveTo(double magnitude, double theta) {
+        drive.setMagnitude(magnitude);
+        rotation.gotoRotation(theta);
     }
 }
 
 record DriveController(SmartMotorController motor) {
-    public Command c_setMagnitude(double magnitude) {
-        return new RunCommand(() ->
-            motor.set(magnitude / SwerveConstants.LIN_SPEED)
-        );
+    public void setMagnitude(double magnitude) {
+        motor.set(magnitude / SwerveConstants.LIN_SPEED);
     }
 }
 
@@ -54,6 +45,8 @@ class RotationController {
 
     private final Translation2d direction;
 
+    private final PIDController pid;
+
     /**
      * @param direction Direction should have a magnitude of √2, as in {@code new Translation2d(±1, ±1)}
      */
@@ -66,33 +59,24 @@ class RotationController {
         this.encoder = encoder;
 
         this.direction = direction.div(Math.sqrt(2));
+
+        this.pid = new PIDController(kP, kI, kD);
+        // encoder readings are from 0-1 but opposite angles are equivalent
+        // since we can just run the wheels backwards (see gotoRotation)
+        this.pid.enableContinuousInput(0, 0.5);
     }
 
     public Translation2d toTranslation(double theta) {
         return direction.times(theta);
     }
 
-    public Command c_gotoRotation(double theta) {
-        return new CreateOnInitialize(() -> this.getRotCommand(theta));
-    }
+    public void gotoRotation(double theta) {
+        double current = getRotation();
 
-    private Command getRotCommand(double theta) {
-        PIDController pid = new PIDController(kP, kI, kD);
-
-        // encoder readings are from 0-1 but opposite angles are equivalent
-        // since we can just run the wheels backwards (see below)
-        pid.enableContinuousInput(0, 0.5);
-
-        return new ezPID(
-            pid,
-            this::getRotation,
-            (voltage) -> {
-                // run this wheel backwards if we are more than 90deg off from the target angle
-                boolean flip = Math.abs(this.getRotation() - theta) > 0.25;
-                setVoltage(flip ? -voltage : voltage);
-            },
-            theta
-        );
+        double voltage = pid.calculate(current, theta);
+        // run this wheel backwards if we are more than 90deg off from the target angle
+        boolean flip = Math.abs(current - theta) > 0.25;
+        setVoltage(flip ? -voltage : voltage);
     }
 
     private double getRotation() {
