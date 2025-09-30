@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
+// TODO: this code is entirely untested - if you use this, you might need to do some debugging...
 public class ezPID extends Command {
     public final PIDController pid;
 
