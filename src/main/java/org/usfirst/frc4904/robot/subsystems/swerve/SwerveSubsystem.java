@@ -92,6 +92,11 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    @Override
+    public void periodic() {
+        for (var module : modules) module.periodic();
+    }
+
     /// COMMANDS
 
     /**
