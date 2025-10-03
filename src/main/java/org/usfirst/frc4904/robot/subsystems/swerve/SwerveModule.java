@@ -9,6 +9,9 @@ public class SwerveModule {
     private final DriveController drive;
     private final RotationController rotation;
 
+    private double magnitude = 0;
+    private double theta = 0;
+
     public SwerveModule(
         SmartMotorController driveMotor,
         SmartMotorController rotMotor,
@@ -24,8 +27,13 @@ public class SwerveModule {
     }
 
     public void moveTo(double magnitude, double theta) {
-        drive.setMagnitude(magnitude);
-        rotation.gotoRotation(theta);
+        this.magnitude = magnitude;
+        this.theta = theta;
+    }
+
+    public void periodic() {
+        boolean flip = rotation.rotateToward(theta);
+        drive.setMagnitude(flip ? -magnitude : magnitude);
     }
 }
 
@@ -62,21 +70,12 @@ class RotationController {
 
         this.pid = new PIDController(kP, kI, kD);
         // encoder readings are from 0-1 but opposite angles are equivalent
-        // since we can just run the wheels backwards (see gotoRotation)
+        // since we can just run the wheels backwards
         this.pid.enableContinuousInput(0, 0.5);
     }
 
     public Translation2d toTranslation(double theta) {
         return direction.times(theta);
-    }
-
-    public void gotoRotation(double theta) {
-        double current = getRotation();
-
-        double voltage = pid.calculate(current, theta);
-        // run this wheel backwards if we are more than 90deg off from the target angle
-        boolean flip = Math.abs(current - theta) > 0.25;
-        setVoltage(flip ? -voltage : voltage);
     }
 
     private double getRotation() {
@@ -85,5 +84,19 @@ class RotationController {
 
     private void setVoltage(double voltage) {
         motor.setVoltage(voltage);
+    }
+
+    /**
+     * @return True if the wheel is currently more than halfway off the target
+     *         and therefore should drive in the opposite direction.
+     */
+    public boolean rotateToward(double theta) {
+        double current = getRotation();
+        double voltage = pid.calculate(current, theta);
+
+        setVoltage(voltage);
+
+        double dist = Math.abs(theta - current);
+        return dist > 0.25 && dist < 0.75;
     }
 }
