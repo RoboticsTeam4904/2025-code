@@ -12,7 +12,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.Filesystem;
 import org.photonvision.PhotonCamera;
 import org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig;
 import org.usfirst.frc4904.robot.subsystems.*;
@@ -25,8 +24,6 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.CANTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomCANSparkMax;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 import org.usfirst.frc4904.standard.custom.sensors.CANEncoder;
-
-import java.io.File;
 
 // import org.usfirst.frc4904.standard.LogKitten;
 

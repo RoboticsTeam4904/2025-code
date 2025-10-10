@@ -12,23 +12,24 @@ import java.util.function.DoubleSupplier;
 
 class SwerveConstants {
     // TODO: get real measurements
-    public static final double RPM = 1;
-    public static final double GEAR_RATIO = 1;
+    public static final double LIN_RPM = 6380;
+    public static final double LIN_GEAR_RATIO = 5.1;
 
     // meters - TODO: get real measurements
-    public static final double WHEEL_RADIUS = 0.01;
-    public static final double ROBOT_DIAGONAL = 1;
+    public static final double WHEEL_RADIUS = 0.07;
+    public static final double ROBOT_DIAGONAL = 1.15;
 
     // m/s
-    public static final double LIN_SPEED = RPM / 60.0 / GEAR_RATIO * (2 * Math.PI * WHEEL_RADIUS);
+    public static final double LIN_SPEED = LIN_RPM / 60.0 / LIN_GEAR_RATIO * (2 * Math.PI * WHEEL_RADIUS);
     // turns/s
     public static final double ROT_SPEED = LIN_SPEED / (Math.PI * ROBOT_DIAGONAL);
 
     // TODO: get real measurements
-    public static final double ROT_MOTOR_SPEED = 5;
-    public static final double ROT_MOTOR_ACCEL = ROT_MOTOR_SPEED * 10;
+    public static final double ROT_RPM = 11000;
+    public static final double ROT_GEAR_RATIO = 46.42;
 
-    public static final double MOTOR_VOLTS = 12;
+    public static final double ROT_MOTOR_SPEED = ROT_RPM / 60.0 / ROT_GEAR_RATIO;
+    public static final double ROT_MOTOR_ACCEL = ROT_MOTOR_SPEED * 12;
 }
 
 public class SwerveSubsystem extends SubsystemBase {
