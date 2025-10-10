@@ -54,9 +54,7 @@ public class Robot extends CommandRobotBase {
         operator.bindCommands();
         //Component.elevator.encoder.reset();
 
-        Component.chassis.setDefaultCommand(
-            Component.chassis.driveCommand(driver::getY, driver::getX, driver::getTurnSpeed)
-        );
+        Component.chassis.c_input(driver::getY, driver::getX, driver::getTurnSpeed);
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);
     }
