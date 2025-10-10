@@ -186,7 +186,7 @@ public class VisionSubsystem extends SubsystemBase {
         );
 
         // command swerve drive
-        Component.chassis.swerveDrive.drive(relativeSpeeds);
+        Component.chassis.drive(relativeSpeeds);
 
         lastTime = currentTime;
         lastSpeed = relativeSpeeds;
@@ -338,7 +338,7 @@ public class VisionSubsystem extends SubsystemBase {
         targetTagOptions = null;
         targetTagId = null;
         desiredOffset = null;
-        Component.chassis.swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
+        Component.chassis.drive(new ChassisSpeeds(0, 0, 0));
 
         System.out.println("Positioning ended" + (reason != null ? " - " + reason : ""));
 

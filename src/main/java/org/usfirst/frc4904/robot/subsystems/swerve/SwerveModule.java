@@ -2,7 +2,7 @@ package org.usfirst.frc4904.robot.subsystems.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import org.usfirst.frc4904.standard.custom.sensors.CANEncoder;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class SwerveModule {
@@ -15,7 +15,7 @@ public class SwerveModule {
     public SwerveModule(
         SmartMotorController driveMotor,
         SmartMotorController rotMotor,
-        DutyCycleEncoder rotEncoder,
+        CANEncoder rotEncoder,
         Translation2d direction
     ) {
         drive = new DriveController(driveMotor);
@@ -49,7 +49,7 @@ class RotationController {
     private static final double kD = 0;
 
     private final SmartMotorController motor;
-    private final DutyCycleEncoder encoder;
+    private final CANEncoder encoder;
 
     private final Translation2d direction;
 
@@ -60,7 +60,7 @@ class RotationController {
      */
     public RotationController(
         SmartMotorController motor,
-        DutyCycleEncoder encoder,
+        CANEncoder encoder,
         Translation2d direction
     ) {
         this.motor = motor;
@@ -79,7 +79,7 @@ class RotationController {
     }
 
     private double getRotation() {
-        return encoder.get();
+        return encoder.getDistance();
     }
 
     private void setVoltage(double voltage) {

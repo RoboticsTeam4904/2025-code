@@ -2,9 +2,11 @@ package org.usfirst.frc4904.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.robot.RobotMap.Component;
+import org.usfirst.frc4904.standard.commands.NoOp;
 
 import java.util.function.DoubleSupplier;
 
@@ -124,5 +126,22 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public Command c_input(DoubleSupplier x, DoubleSupplier y, DoubleSupplier theta) {
         return run(() -> input(x.getAsDouble(), y.getAsDouble(), theta.getAsDouble()));
+    }
+
+    // TODO remove
+
+    public Command drive(ChassisSpeeds s) {
+        return new NoOp();
+    }
+
+    public Command setMotorBrake(Boolean brake) {
+        return new NoOp();
+    }
+
+    public Command getAutonomousCommand(String path, Boolean setOdom, Boolean flipSide) {
+        return new NoOp();
+    }
+
+    public void resetOdometry() {
     }
 }

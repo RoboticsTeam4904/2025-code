@@ -1,10 +1,12 @@
 package org.usfirst.frc4904.robot;
 
 import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -14,12 +16,15 @@ import edu.wpi.first.wpilibj.Filesystem;
 import org.photonvision.PhotonCamera;
 import org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig;
 import org.usfirst.frc4904.robot.subsystems.*;
+import org.usfirst.frc4904.robot.subsystems.swerve.SwerveSubsystem;
+import org.usfirst.frc4904.robot.subsystems.swerve.SwerveModule;
 import org.usfirst.frc4904.standard.custom.CustomEncoder;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandXbox;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CANTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomCANSparkMax;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
+import org.usfirst.frc4904.standard.custom.sensors.CANEncoder;
 
 import java.io.File;
 
@@ -144,24 +149,46 @@ public class RobotMap {
         Component.navx = new AHRS(NavXComType.kMXP_SPI);
 
         Component.chassis = new SwerveSubsystem(
-            new File(Filesystem.getDeployDirectory(), "swerve"),
-            360,
-            0.0473,
-            3
-        ); //BENSPEED IS 5, NOTBENSPEED IS 3
+            new SwerveModule(
+                new CANTalonFX(1),
+                new CustomCANSparkMax(5, MotorType.kBrushless, false),
+                new CANEncoder(5),
+                new Translation2d(-1, -1)
+            ),
+            new SwerveModule(
+                new CANTalonFX(2),
+                new CustomCANSparkMax(6, MotorType.kBrushless, false),
+                new CANEncoder(6),
+                new Translation2d(1, -1)
+            ),
+            new SwerveModule(
+                new CANTalonFX(3),
+                new CustomCANSparkMax(7, MotorType.kBrushless, false),
+                new CANEncoder(7),
+                new Translation2d(-1, 1)
+            ),
+            new SwerveModule(
+                new CANTalonFX(4),
+                new CustomCANSparkMax(8, MotorType.kBrushless, false),
+                new CANEncoder(8),
+                new Translation2d(1, 1)
+            )
+        );
+
         // Component.chassis.swerveDrive.setGyroOffset(new Rotation3d(0, 0, Units.degreesToRadians(180)));
 
-        // TODO: left camera is broken - uncomment when (if) fixed
-        // Component.cameraLeft = new PhotonCamera("dauntless-left");
+        Component.cameraLeft = new PhotonCamera("dauntless-left");
         Component.cameraRight = new PhotonCamera("dauntless-right");
         Component.vision = new VisionSubsystem(
             new PhotonCamera[] {
-                // Component.cameraLeft,
+                Component.cameraLeft,
                 Component.cameraRight
             },
             new Transform2d[] {
-                // new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(-10.6), Rotation2d.kZero),
+                new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(-10.6), Rotation2d.kZero),
                 new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(10.6), Rotation2d.kZero)
+
+                // new Transform2d(Units.inchesToMeters(0), Units.inchesToMeters(0), Rotation2d.kZero)
             }
         );
 
@@ -187,8 +214,8 @@ public class RobotMap {
             -4
         );
 
-        // Component.climberMotor = new CANTalonFX(Port.CANMotor.CLIMBER);
-        // Component.climber = new MotorSubsystem(Component.climberMotor, 6);
+        Component.climberMotor = new CANTalonFX(Port.CANMotor.CLIMBER);
+        Component.climber = new MotorSubsystem(Component.climberMotor, 6);
 
         Component.elevatorMotorOne = new CANTalonFX(Port.CANMotor.ELEVATOR_LEFT);
         Component.elevatorMotorTwo = new CANTalonFX(Port.CANMotor.ELEVATOR_RIGHT);
