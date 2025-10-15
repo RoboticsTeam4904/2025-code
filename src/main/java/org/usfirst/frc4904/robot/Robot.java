@@ -14,8 +14,6 @@ import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
 import java.util.function.Supplier;
 
 public class Robot extends CommandRobotBase {
@@ -54,7 +52,9 @@ public class Robot extends CommandRobotBase {
         operator.bindCommands();
         //Component.elevator.encoder.reset();
 
-        Component.chassis.c_input(driver::getY, driver::getX, driver::getTurnSpeed);
+        Component.chassis.setDefaultCommand(
+            Component.chassis.c_input(driver::getY, driver::getX, driver::getTurnSpeed)
+        );
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);
     }

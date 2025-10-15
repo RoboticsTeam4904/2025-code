@@ -32,6 +32,7 @@ public class SwerveModule {
     }
 
     public void periodic() {
+        // TODO run this faster than 50hz - run pid on motor
         boolean flip = rotation.rotateToward(theta);
         drive.setMagnitude(flip ? -magnitude : magnitude);
     }
