@@ -10,11 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
-import org.usfirst.frc4904.robot.humaninterface.operators.AnnaOperator;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.humaninput.Driver;
-import org.usfirst.frc4904.standard.humaninput.Operator;
 
 import java.util.function.Supplier;
 
@@ -29,12 +27,12 @@ public class Robot extends CommandRobotBase {
         public static final boolean FLIP_SIDE = false;
 
         /** The auton to run */
-        public static Supplier<Command> COMMAND = Auton::c_jankReverse;
+        public static Supplier<Command> COMMAND = Auton::c_jankRightCoral;
     }
 
     private final Driver driver = new SwerveGain();
-    private final Operator  operator = new AnnaOperator();
-    private final RobotMap  map = new RobotMap();
+    private final DefaultOperator operator = new DefaultOperator();
+    private final RobotMap map = new RobotMap();
 
     protected double scaleGain(double input, double gain, double exp) {
         return Math.pow(Math.abs(input), exp) * gain * Math.signum(input);
@@ -54,7 +52,9 @@ public class Robot extends CommandRobotBase {
         operator.bindCommands();
         //Component.elevator.encoder.reset();
 
-        Component.chassis.c_input(driver::getY, driver::getX, driver::getTurnSpeed);
+        Component.chassis.setDefaultCommand(
+            Component.chassis.c_input(driver::getY, driver::getX, driver::getTurnSpeed)
+        );
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);
     }
