@@ -33,7 +33,7 @@ class SwerveConstants {
 }
 
 public class SwerveSubsystem extends SubsystemBase {
-    public final SwerveModule[] modules;
+    private final SwerveModule[] modules;
 
     public SwerveSubsystem(SwerveModule... modules) {
         this.modules = modules;

@@ -8,17 +8,11 @@ package org.usfirst.frc4904.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import swervelib.encoders.SparkMaxEncoderSwerve;
-
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.humaninput.Driver;
-
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkMax;
 
 import java.util.function.Supplier;
 
@@ -71,8 +65,6 @@ public class Robot extends CommandRobotBase {
     public void teleopExecute() {
         // TODO maybe unnecessary
         Component.vision.periodic();
-
-        System.out.println(RobotMap.Component.chassis.modules[0].rotation.motor.getAbsoluteEncoder().getPosition());
 
         double y = RobotMap.HumanInput.Operator.joystick.getY();
 

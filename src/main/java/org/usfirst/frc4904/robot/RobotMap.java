@@ -14,16 +14,18 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import org.photonvision.PhotonCamera;
 import org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig;
-import org.usfirst.frc4904.robot.subsystems.*;
-import org.usfirst.frc4904.robot.subsystems.swerve.SwerveSubsystem;
+import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
+import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
+import org.usfirst.frc4904.robot.subsystems.MotorSubsystem;
+import org.usfirst.frc4904.robot.subsystems.VisionSubsystem;
 import org.usfirst.frc4904.robot.subsystems.swerve.SwerveModule;
+import org.usfirst.frc4904.robot.subsystems.swerve.SwerveSubsystem;
 import org.usfirst.frc4904.standard.custom.CustomEncoder;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandXbox;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CANTalonFX;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomCANSparkMax;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
-import org.usfirst.frc4904.standard.custom.sensors.CANEncoder;
 
 // import org.usfirst.frc4904.standard.LogKitten;
 
@@ -145,29 +147,34 @@ public class RobotMap {
     public RobotMap() {
         Component.navx = new AHRS(NavXComType.kMXP_SPI);
 
+        var flTurn = new CustomCANSparkMax(5, MotorType.kBrushless, false);
+        var frTurn = new CustomCANSparkMax(6, MotorType.kBrushless, false);
+        var blTurn = new CustomCANSparkMax(7, MotorType.kBrushless, false);
+        var brTurn = new CustomCANSparkMax(8, MotorType.kBrushless, false);
+
         Component.chassis = new SwerveSubsystem(
             new SwerveModule(
                 new CANTalonFX(1),
-                new CustomCANSparkMax(5, MotorType.kBrushless, false),
-                new CANEncoder(5),
+                flTurn,
+                flTurn.getAbsoluteEncoder(),
                 new Translation2d(-1, -1)
             ),
             new SwerveModule(
                 new CANTalonFX(2),
-                new CustomCANSparkMax(6, MotorType.kBrushless, false),
-                new CANEncoder(6),
+                frTurn,
+                frTurn.getAbsoluteEncoder(),
                 new Translation2d(1, -1)
             ),
             new SwerveModule(
                 new CANTalonFX(3),
-                new CustomCANSparkMax(7, MotorType.kBrushless, false),
-                new CANEncoder(7),
+                blTurn,
+                blTurn.getAbsoluteEncoder(),
                 new Translation2d(-1, 1)
             ),
             new SwerveModule(
                 new CANTalonFX(4),
-                new CustomCANSparkMax(8, MotorType.kBrushless, false),
-                new CANEncoder(8),
+                brTurn,
+                brTurn.getAbsoluteEncoder(),
                 new Translation2d(1, 1)
             )
         );
