@@ -2,19 +2,22 @@ package org.usfirst.frc4904.robot.subsystems.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
+
 import org.usfirst.frc4904.standard.custom.sensors.CANEncoder;
+import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomCANSparkMax;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class SwerveModule {
     private final DriveController drive;
-    private final RotationController rotation;
+    public final RotationController rotation;
 
     private double magnitude = 0;
     private double theta = 0;
 
     public SwerveModule(
         SmartMotorController driveMotor,
-        SmartMotorController rotMotor,
+        CustomCANSparkMax rotMotor,
         CANEncoder rotEncoder,
         Translation2d direction
     ) {
@@ -44,12 +47,12 @@ record DriveController(SmartMotorController motor) {
     }
 }
 
-class RotationController {
+public class RotationController {
     private static final double kP = 1; // TODO: tune
     private static final double kI = 0;
     private static final double kD = 0;
 
-    private final SmartMotorController motor;
+    public final CustomCANSparkMax motor;
     private final CANEncoder encoder;
 
     private final Translation2d direction;
@@ -60,7 +63,7 @@ class RotationController {
      * @param direction Direction should have a magnitude of √2, as in {@code new Translation2d(±1, ±1)}
      */
     public RotationController(
-        SmartMotorController motor,
+        CustomCANSparkMax motor,
         CANEncoder encoder,
         Translation2d direction
     ) {
@@ -94,7 +97,6 @@ class RotationController {
     public boolean rotateToward(double theta) {
         double current = getRotation();
         double voltage = pid.calculate(current, theta);
-
         setVoltage(voltage);
 
         double dist = Math.abs(theta - current);
