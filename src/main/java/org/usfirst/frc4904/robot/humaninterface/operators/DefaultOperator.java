@@ -38,7 +38,7 @@ public class DefaultOperator extends Operator {
         joystick.button5.onTrue(Component.ramp.c_backward());
         joystick.button3.onFalse(Component.ramp.c_stop());
         joystick.button5.onFalse(Component.ramp.c_stop());
- 
+
         /// MANUAL OUTTAKE CONTROL
         joystick.button4.onTrue(Component.outtake.c_forward());
         joystick.button6.onTrue(Component.outtake.c_backward());

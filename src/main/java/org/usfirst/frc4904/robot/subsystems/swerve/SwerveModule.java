@@ -1,24 +1,21 @@
 package org.usfirst.frc4904.robot.subsystems.swerve;
 
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Timer;
-
-import org.usfirst.frc4904.standard.custom.sensors.CANEncoder;
-import org.usfirst.frc4904.standard.custom.motorcontrollers.CustomCANSparkMax;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class SwerveModule {
     private final DriveController drive;
-    public final RotationController rotation;
+    private final RotationController rotation;
 
     private double magnitude = 0;
     private double theta = 0;
 
     public SwerveModule(
         SmartMotorController driveMotor,
-        CustomCANSparkMax rotMotor,
-        CANEncoder rotEncoder,
+        SmartMotorController rotMotor,
+        SparkAbsoluteEncoder rotEncoder,
         Translation2d direction
     ) {
         drive = new DriveController(driveMotor);
@@ -47,30 +44,27 @@ record DriveController(SmartMotorController motor) {
     }
 }
 
-public class RotationController {
+class RotationController {
     private static final double kP = 1; // TODO: tune
     private static final double kI = 0;
     private static final double kD = 0;
 
-    public final CustomCANSparkMax motor;
-    private final CANEncoder encoder;
+    public final SmartMotorController motor;
+    private final SparkAbsoluteEncoder encoder;
 
     private final Translation2d direction;
 
     private final PIDController pid;
 
-    /**
-     * @param direction Direction should have a magnitude of √2, as in {@code new Translation2d(±1, ±1)}
-     */
     public RotationController(
-        CustomCANSparkMax motor,
-        CANEncoder encoder,
+        SmartMotorController motor,
+        SparkAbsoluteEncoder encoder,
         Translation2d direction
     ) {
         this.motor = motor;
         this.encoder = encoder;
 
-        this.direction = direction.div(Math.sqrt(2));
+        this.direction = direction.div(direction.getNorm());
 
         this.pid = new PIDController(kP, kI, kD);
         // encoder readings are from 0-1 but opposite angles are equivalent
@@ -83,7 +77,7 @@ public class RotationController {
     }
 
     private double getRotation() {
-        return encoder.getDistance();
+        return encoder.getPosition();
     }
 
     private void setVoltage(double voltage) {
