@@ -88,6 +88,14 @@ public class SwerveSubsystem extends SubsystemBase {
         for (int i = 0; i < modules.length; i++) {
             Translation2d normalized = translations[i].div(norm);
 
+            if (i == 0) {
+                // System.out.println("angle: " + normalized.getAngle().getRotations());
+            }
+
+            // double angle = normalized.getAngle().getRotations();
+            // if (angle > 0) angle = angle % 1;
+            // while (angle < 0) angle += 1;
+
             modules[i].moveTo(
                 normalized.getNorm(),
                 normalized.getAngle().getRotations()

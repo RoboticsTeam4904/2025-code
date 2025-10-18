@@ -28,7 +28,7 @@ public class SwerveModule {
 
     public void moveTo(double magnitude, double theta) {
         this.magnitude = magnitude;
-        this.theta = theta;
+        if (magnitude > 0) this.theta = theta;
     }
 
     public void periodic() {
@@ -45,9 +45,9 @@ record DriveController(SmartMotorController motor) {
 }
 
 class RotationController {
-    private static final double kP = 1; // TODO: tune
-    private static final double kI = 0;
-    private static final double kD = 0;
+    private static final double kP = 10; // TODO: tune
+    private static final double kI = 0.1;
+    private static final double kD = 0.5;
 
     public final SmartMotorController motor;
     private final SparkAbsoluteEncoder encoder;
@@ -90,8 +90,14 @@ class RotationController {
      */
     public boolean rotateToward(double theta) {
         double current = getRotation();
-        double voltage = pid.calculate(current, theta);
+        // System.out.println(
+        //     "CHEESE DISTANCE: " + (theta - current)
+        // );
+        double voltage = -pid.calculate(current, theta);
+        // System.out.println("CHEESE VOLTAGE: " + voltage);
         setVoltage(voltage);
+
+        // return false;
 
         double dist = Math.abs(theta - current);
         return dist > 0.25 && dist < 0.75;
