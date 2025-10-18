@@ -116,7 +116,7 @@ public class Robot extends CommandRobotBase {
     public void disabledInitialize() {
         Component.vision.stopPositioning("Robot disabled", false);
 
-        Component.chassis.setMotorBrake(true);
+        Component.chassis.setMotorBrake(false);
         // Component.lights.flashColor(LightSubsystem.Color.DISABLED);
 
     //     Component.elevatorMotorOne.setBrakeOnNeutral();
@@ -125,7 +125,6 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void disabledExecute() {
-
     }
 
     @Override
@@ -144,7 +143,8 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void alwaysExecute() {
-        // logging stuff can go here
+        System.out.println("pos: " + RobotMap.cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.getPosition());
+        // logging stuff cannot go here. turn back now
         // if (Component.elevator != null && Timer.getFPGATimestamp() - lastLogTime > 0.2) {
         //     lastLogTime = Timer.getFPGATimestamp();
         //     System.out.printf("ELEVATOR ENCODER: %.4f%n", Component.elevatorEncoder.get());
