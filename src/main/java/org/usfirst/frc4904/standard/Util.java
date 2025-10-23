@@ -4,6 +4,7 @@ import edu.wpi.first.hal.util.BoundaryException;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 /**
  * Common utilities
@@ -150,5 +151,12 @@ public class Util {
             }
             return true;
         };
+    }
+
+    /**
+     * Negates a double supplier
+     */
+    public static DoubleSupplier neg(DoubleSupplier dealer) {
+        return () -> -dealer.getAsDouble();
     }
 }

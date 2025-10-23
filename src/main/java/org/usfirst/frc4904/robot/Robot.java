@@ -12,6 +12,7 @@ import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
+import org.usfirst.frc4904.standard.Util;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 
 import java.util.function.Supplier;
@@ -53,7 +54,7 @@ public class Robot extends CommandRobotBase {
         //Component.elevator.encoder.reset();
 
         Component.chassis.setDefaultCommand(
-            Component.chassis.c_input(driver::getY, driver::getX, driver::getTurnSpeed)
+            Component.chassis.c_input(Util.neg(driver::getY), Util.neg(driver::getX), driver::getTurnSpeed)
         );
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);
@@ -143,7 +144,7 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void alwaysExecute() {
-        System.out.println("pos: " + RobotMap.cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.getPosition());
+        // System.out.println("pos: " + RobotMap.cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.getPosition());
         // logging stuff cannot go here. turn back now
         // if (Component.elevator != null && Timer.getFPGATimestamp() - lastLogTime > 0.2) {
         //     lastLogTime = Timer.getFPGATimestamp();

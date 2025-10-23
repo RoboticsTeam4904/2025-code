@@ -46,6 +46,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param theta Turn speed from [-1, 1]
      */
     public void input(double x, double y, double theta) {
+        // System.out.println("x: " + x + " y: " + y + " theta: " + theta);
+
         Translation2d scaled = new Translation2d(x, y).times(SwerveConstants.LIN_SPEED);
         driveFieldRelative(scaled, theta * SwerveConstants.ROT_SPEED);
     }
@@ -95,10 +97,12 @@ public class SwerveSubsystem extends SubsystemBase {
             // double angle = normalized.getAngle().getRotations();
             // if (angle > 0) angle = angle % 1;
             // while (angle < 0) angle += 1;
-
+            
+            double magnitude = normalized.getNorm();
             modules[i].moveTo(
-                normalized.getNorm(),
-                normalized.getAngle().getRotations()
+                magnitude,
+                // if magnitude is 0, this value is ignored
+                magnitude > 0 ? normalized.getAngle().getRotations() : 0
             );
         }
     }
@@ -137,6 +141,10 @@ public class SwerveSubsystem extends SubsystemBase {
         return run(() -> input(x.getAsDouble(), y.getAsDouble(), theta.getAsDouble()));
     }
 
+    public void resetOdometry() {
+        Component.navx.zeroYaw();
+    }
+
     // TODO remove
 
     public Command drive(ChassisSpeeds s) {
@@ -149,8 +157,5 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Command getAutonomousCommand(String path, Boolean setOdom, Boolean flipSide) {
         return new NoOp();
-    }
-
-    public void resetOdometry() {
     }
 }
