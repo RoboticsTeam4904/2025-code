@@ -161,25 +161,25 @@ public class RobotMap {
                 new CANTalonFX(1),
                 flTurn,
                 cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
-                new Translation2d(-1, -1)
+                new Translation2d(-1, 1)
             ),
             new SwerveModule(
                 new CANTalonFX(2),
                 frTurn,
                 frTurn.getAbsoluteEncoder(),
-                new Translation2d(1, -1)
+                new Translation2d(1, 1)
             ),
             new SwerveModule(
                 new CANTalonFX(3),
                 blTurn,
                 blTurn.getAbsoluteEncoder(),
-                new Translation2d(-1, 1)
+                new Translation2d(-1, -1)
             ),
             new SwerveModule(
                 new CANTalonFX(4),
                 brTurn,
                 brTurn.getAbsoluteEncoder(),
-                new Translation2d(1, 1)
+                new Translation2d(1, -1)
             )
         );
 

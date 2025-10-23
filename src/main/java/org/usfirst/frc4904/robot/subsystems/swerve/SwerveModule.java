@@ -3,6 +3,8 @@ package org.usfirst.frc4904.robot.subsystems.swerve;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+
+import org.usfirst.frc4904.standard.Util;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
 public class SwerveModule {
@@ -45,9 +47,11 @@ record DriveController(SmartMotorController motor) {
 }
 
 class RotationController {
-    private static final double kP = 10; // TODO: tune
-    private static final double kI = 0.1;
-    private static final double kD = 0.5;
+    private static final double kP = 40;
+    private static final double kI = 0;
+    private static final double kD = 0;
+
+    private static final double MAX_VOLTAGE = 8;
 
     public final SmartMotorController motor;
     private final SparkAbsoluteEncoder encoder;
@@ -77,7 +81,8 @@ class RotationController {
     }
 
     private double getRotation() {
-        return encoder.getPosition();
+        // flip so that positive is counterclockwise
+        return 1 - encoder.getPosition();
     }
 
     private void setVoltage(double voltage) {
@@ -90,14 +95,8 @@ class RotationController {
      */
     public boolean rotateToward(double theta) {
         double current = getRotation();
-        // System.out.println(
-        //     "CHEESE DISTANCE: " + (theta - current)
-        // );
-        double voltage = -pid.calculate(current, theta);
-        // System.out.println("CHEESE VOLTAGE: " + voltage);
-        setVoltage(voltage);
-
-        // return false;
+        double voltage = pid.calculate(current, theta);
+        setVoltage(Util.clamp(voltage, -MAX_VOLTAGE, MAX_VOLTAGE));
 
         double dist = Math.abs(theta - current);
         return dist > 0.25 && dist < 0.75;
