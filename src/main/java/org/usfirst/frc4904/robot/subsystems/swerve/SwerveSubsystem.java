@@ -9,6 +9,7 @@ import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.commands.NoOp;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 class SwerveConstants {
     // TODO: get real measurements
@@ -45,10 +46,10 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param y Y movement from [-1, 1]
      * @param theta Turn speed from [-1, 1]
      */
-    public void input(double x, double y, double theta) {
+    public void input(Translation2d trans, double theta) {
         // System.out.println("x: " + x + " y: " + y + " theta: " + theta);
 
-        Translation2d scaled = new Translation2d(x, y).times(SwerveConstants.LIN_SPEED);
+        Translation2d scaled = trans.times(SwerveConstants.LIN_SPEED);
         driveFieldRelative(scaled, theta * SwerveConstants.ROT_SPEED);
     }
 
@@ -97,7 +98,7 @@ public class SwerveSubsystem extends SubsystemBase {
             // double angle = normalized.getAngle().getRotations();
             // if (angle > 0) angle = angle % 1;
             // while (angle < 0) angle += 1;
-            
+
             double magnitude = normalized.getNorm();
             modules[i].moveTo(
                 magnitude,
@@ -137,8 +138,8 @@ public class SwerveSubsystem extends SubsystemBase {
      * <p>
      * See {@link #input(double, double, double)}
      */
-    public Command c_input(DoubleSupplier x, DoubleSupplier y, DoubleSupplier theta) {
-        return run(() -> input(x.getAsDouble(), y.getAsDouble(), theta.getAsDouble()));
+    public Command c_input(Supplier<Translation2d> trans, DoubleSupplier theta) {
+        return run(() -> input(trans.get(), theta.getAsDouble()));
     }
 
     public void resetOdometry() {

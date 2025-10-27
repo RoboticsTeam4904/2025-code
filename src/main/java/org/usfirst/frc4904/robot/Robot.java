@@ -13,7 +13,6 @@ import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
 import org.usfirst.frc4904.standard.Util;
-import org.usfirst.frc4904.standard.humaninput.Driver;
 
 import java.util.function.Supplier;
 
@@ -31,7 +30,7 @@ public class Robot extends CommandRobotBase {
         public static Supplier<Command> COMMAND = Auton::c_jankRightCoral;
     }
 
-    private final Driver driver = new SwerveGain();
+    private final SwerveGain driver = new SwerveGain();
     private final DefaultOperator operator = new DefaultOperator();
     private final RobotMap map = new RobotMap();
 
@@ -54,7 +53,7 @@ public class Robot extends CommandRobotBase {
         //Component.elevator.encoder.reset();
 
         Component.chassis.setDefaultCommand(
-            Component.chassis.c_input(Util.neg(driver::getY), Util.neg(driver::getX), driver::getTurnSpeed)
+            Component.chassis.c_input(Util.neg(driver::getTrans), driver::getTurnSpeed)
         );
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);
