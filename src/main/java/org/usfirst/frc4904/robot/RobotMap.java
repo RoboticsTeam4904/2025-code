@@ -244,11 +244,11 @@ public class RobotMap {
 
         HumanInput.Driver.xyJoystick = new CustomCommandJoystick(
             Port.HumanInput.xyJoystickPort,
-            HumanInterfaceConfig.JOYSTICK_DEADZONE
+            0.0
         );
         HumanInput.Driver.turnJoystick = new CustomCommandJoystick(
             Port.HumanInput.zJoystickPort,
-            HumanInterfaceConfig.JOYSTICK_DEADZONE
+            0.0
         );
 
         HumanInput.Operator.joystick = new CustomCommandJoystick(Port.HumanInput.joystick, 0.01);
