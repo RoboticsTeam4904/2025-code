@@ -47,15 +47,18 @@ public class SwerveGain extends Driver { //ALL SWERVEGAIN JOYSTICKS OUTPUT FROM 
         double mag = Math.hypot(rawX, rawY);
 
         if (mag < dead) {
-            return new Translation2d((rawX / mag) * 0.01, (rawY / mag) * 0.01);
+            if (mag == 0) {
+                return Translation2d.kZero;
+            }
+
+            double scale = 0.01 / mag;
+            return new Translation2d(rawX * scale, rawY * scale);
         }
 
-        double ratio = 1 / (1 - dead);
+        double scaled = scaleGain((mag - dead) / (1 - dead), SPEED_EXP);
+        double scale = scaled / mag;
 
-        return new Translation2d(
-            scaleGain((rawX - dead) * ratio, SPEED_EXP),
-            scaleGain((rawY - dead) * ratio, SPEED_EXP)
-        );
+        return new Translation2d(rawX * scale, rawY * scale);
     }
 
     public double getTurnSpeed() {
