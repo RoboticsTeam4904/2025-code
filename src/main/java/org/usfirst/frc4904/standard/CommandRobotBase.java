@@ -51,15 +51,19 @@ public abstract class CommandRobotBase extends TimedRobot {
 	public static Driver drivingConfig = new Driver("uhohhh") {
 		@Override
 		public double getX() {
-			for (int i=0; i<1000000; i++) System.err.println("DRIVER NOT CONFIGED");
+			for (int i = 0; i < 1000000; i++) System.err.println("DRIVER NOT CONFIGED");
 			return 0;
 		}
 
 		@Override
-		public double getY() {return 0;}
+		public double getY() {
+			return 0;
+		}
 
 		@Override
-		public double getTurnSpeed() {return 0;}
+		public double getTurnSpeed() {
+			return 0;
+		}
 
 		@Override
 		public void bindCommands() {}

@@ -1,8 +1,7 @@
 package org.usfirst.frc4904.standard.humaninput;
 
 /**
- * Operator specifc version of HumanInterface
- *
+ * Operator specific version of HumanInterface
  */
 public abstract class Operator extends HumanInput {
 

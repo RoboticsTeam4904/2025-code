@@ -40,7 +40,6 @@ public class Robot extends CommandRobotBase {
 
     public Robot() {
         super();
-        //can set default auton command here
     }
 
     @Override
@@ -143,7 +142,6 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void alwaysExecute() {
-        // System.out.println("pos: " + RobotMap.cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.getPosition());
         // logging stuff cannot go here. turn back now
         // if (Component.elevator != null && Timer.getFPGATimestamp() - lastLogTime > 0.2) {
         //     lastLogTime = Timer.getFPGATimestamp();
