@@ -46,11 +46,11 @@ record DriveController(SmartMotorController motor) {
 }
 
 class RotationController {
-    private static final double kP = 40;
+    private static final double kP = 10;
     private static final double kI = 0;
     private static final double kD = 0;
 
-    private static final double MAX_VOLTAGE = 8;
+    private static final double MAX_VOLTAGE = 2; // 8;
 
     public final SmartMotorController motor;
     private final DutyCycleEncoder encoder;
@@ -80,8 +80,7 @@ class RotationController {
     }
 
     private double getRotation() {
-        // flip so that positive is counterclockwise
-        return 1 - encoder.get();
+        return encoder.get();
     }
 
     private void setVoltage(double voltage) {
@@ -94,7 +93,9 @@ class RotationController {
      */
     public boolean rotateToward(double theta) {
         double current = getRotation();
+        
         double voltage = pid.calculate(current, theta);
+        System.out.println("CURRENT VOLTACION: " + voltage);
         setVoltage(Util.clamp(voltage, -MAX_VOLTAGE, MAX_VOLTAGE));
 
         double dist = Math.abs(theta - current);

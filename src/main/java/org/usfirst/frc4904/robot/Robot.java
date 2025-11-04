@@ -63,7 +63,7 @@ public class Robot extends CommandRobotBase {
     @Override
     public void teleopExecute() {
         // TODO maybe unnecessary
-        Component.vision.periodic();
+        // Component.vision.periodic();
 
         double y = RobotMap.HumanInput.Operator.joystick.getY();
 
@@ -113,7 +113,7 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void disabledInitialize() {
-        Component.vision.stopPositioning("Robot disabled", false);
+        // Component.vision.stopPositioning("Robot disabled", false);
 
         Component.chassis.setMotorBrake(false);
         // Component.lights.flashColor(LightSubsystem.Color.DISABLED);

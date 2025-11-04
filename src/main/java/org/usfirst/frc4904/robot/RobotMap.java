@@ -153,8 +153,8 @@ public class RobotMap {
 
         Component.chassis = new SwerveSubsystem(
             new SwerveModule(
+                new CANTalonFX(0),
                 new CANTalonFX(1),
-                new CANTalonFX(2),
                 new DutyCycleEncoder(0),
                 new Translation2d(-1, 1)
             )
@@ -180,62 +180,62 @@ public class RobotMap {
 
         // Component.chassis.swerveDrive.setGyroOffset(new Rotation3d(0, 0, Units.degreesToRadians(180)));
 
-        Component.cameraLeft = new PhotonCamera("dauntless-left");
-        Component.cameraRight = new PhotonCamera("dauntless-right");
-        Component.vision = new VisionSubsystem(
-            new PhotonCamera[] {
-                Component.cameraLeft,
-                Component.cameraRight
-            },
-            new Transform2d[] {
-                new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(-10.6), Rotation2d.kZero),
-                new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(10.6), Rotation2d.kZero)
+        // Component.cameraLeft = new PhotonCamera("dauntless-left");
+        // Component.cameraRight = new PhotonCamera("dauntless-right");
+        // Component.vision = new VisionSubsystem(
+        //     new PhotonCamera[] {
+        //         Component.cameraLeft,
+        //         Component.cameraRight
+        //     },
+        //     new Transform2d[] {
+        //         new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(-10.6), Rotation2d.kZero),
+        //         new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(10.6), Rotation2d.kZero)
 
-                // new Transform2d(Units.inchesToMeters(0), Units.inchesToMeters(0), Rotation2d.kZero)
-            }
-        );
+        //         // new Transform2d(Units.inchesToMeters(0), Units.inchesToMeters(0), Rotation2d.kZero)
+        //     }
+        // );
 
-        Component.rampMotor = new CustomCANSparkMax(
-            Port.CANMotor.RAMP,
-            SparkLowLevel.MotorType.kBrushless,
-            false
-        );
-        Component.ramp = new MotorSubsystem(Component.rampMotor, -7);
+        // Component.rampMotor = new CustomCANSparkMax(
+        //     Port.CANMotor.RAMP,
+        //     SparkLowLevel.MotorType.kBrushless,
+        //     false
+        // );
+        // Component.ramp = new MotorSubsystem(Component.rampMotor, -7);
 
-        Component.outtakeMotorLeft = new CustomCANSparkMax(
-            Port.CANMotor.OUTTAKE_MOTOR_LEFT,
-            SparkLowLevel.MotorType.kBrushless,
-            false
-        );
-        Component.outtakeMotorRight = new CustomCANSparkMax(
-            Port.CANMotor.OUTTAKE_MOTOR_RIGHT,
-            SparkLowLevel.MotorType.kBrushless,
-            false
-        );
-        Component.outtake = new MotorSubsystem(
-            new SmartMotorController[] { Component.outtakeMotorLeft, Component.outtakeMotorRight },
-            -4
-        );
+        // Component.outtakeMotorLeft = new CustomCANSparkMax(
+        //     Port.CANMotor.OUTTAKE_MOTOR_LEFT,
+        //     SparkLowLevel.MotorType.kBrushless,
+        //     false
+        // );
+        // Component.outtakeMotorRight = new CustomCANSparkMax(
+        //     Port.CANMotor.OUTTAKE_MOTOR_RIGHT,
+        //     SparkLowLevel.MotorType.kBrushless,
+        //     false
+        // );
+        // Component.outtake = new MotorSubsystem(
+        //     new SmartMotorController[] { Component.outtakeMotorLeft, Component.outtakeMotorRight },
+        //     -4
+        // );
 
-        Component.climberMotor = new CANTalonFX(Port.CANMotor.CLIMBER);
-        Component.climber = new MotorSubsystem(Component.climberMotor, 6);
+        // Component.climberMotor = new CANTalonFX(Port.CANMotor.CLIMBER);
+        // Component.climber = new MotorSubsystem(Component.climberMotor, 6);
 
-        Component.elevatorMotorOne = new CANTalonFX(Port.CANMotor.ELEVATOR_LEFT);
-        Component.elevatorMotorTwo = new CANTalonFX(Port.CANMotor.ELEVATOR_RIGHT);
-        Component.elevatorEncoder = new CustomEncoder(Port.PWM.ELEVATOR_ENCODER);
-        Component.elevator = new ElevatorSubsystem(
-            Component.elevatorMotorOne,
-            Component.elevatorMotorTwo,
-            Component.elevatorEncoder
-        );
+        // Component.elevatorMotorOne = new CANTalonFX(Port.CANMotor.ELEVATOR_LEFT);
+        // Component.elevatorMotorTwo = new CANTalonFX(Port.CANMotor.ELEVATOR_RIGHT);
+        // Component.elevatorEncoder = new CustomEncoder(Port.PWM.ELEVATOR_ENCODER);
+        // Component.elevator = new ElevatorSubsystem(
+        //     Component.elevatorMotorOne,
+        //     Component.elevatorMotorTwo,
+        //     Component.elevatorEncoder
+        // );
 
-        Component.ledStrip = new AddressableLED(Port.PWM.LED_STRIP);
-        Component.lights = new LightSubsystem(
-            Component.ledStrip,
-            107,
-            new int[] { 20, 37, 34, 16 },
-            new boolean[] { false, true, false, true }
-        );
+        // Component.ledStrip = new AddressableLED(Port.PWM.LED_STRIP);
+        // Component.lights = new LightSubsystem(
+        //     Component.ledStrip,
+        //     107,
+        //     new int[] { 20, 37, 34, 16 },
+        //     new boolean[] { false, true, false, true }
+        // );
 
         HumanInput.Driver.xyJoystick = new CustomCommandJoystick(
             Port.HumanInput.xyJoystickPort,
