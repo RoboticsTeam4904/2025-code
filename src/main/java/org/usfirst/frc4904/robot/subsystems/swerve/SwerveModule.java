@@ -1,9 +1,8 @@
 package org.usfirst.frc4904.robot.subsystems.swerve;
 
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import org.usfirst.frc4904.standard.Util;
 import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController;
 
@@ -17,7 +16,7 @@ public class SwerveModule {
     public SwerveModule(
         SmartMotorController driveMotor,
         SmartMotorController rotMotor,
-        SparkAbsoluteEncoder rotEncoder,
+        DutyCycleEncoder rotEncoder,
         Translation2d direction
     ) {
         drive = new DriveController(driveMotor);
@@ -54,7 +53,7 @@ class RotationController {
     private static final double MAX_VOLTAGE = 8;
 
     public final SmartMotorController motor;
-    private final SparkAbsoluteEncoder encoder;
+    private final DutyCycleEncoder encoder;
 
     private final Translation2d direction;
 
@@ -62,7 +61,7 @@ class RotationController {
 
     public RotationController(
         SmartMotorController motor,
-        SparkAbsoluteEncoder encoder,
+        DutyCycleEncoder encoder,
         Translation2d direction
     ) {
         this.motor = motor;
@@ -82,7 +81,7 @@ class RotationController {
 
     private double getRotation() {
         // flip so that positive is counterclockwise
-        return 1 - encoder.getPosition();
+        return 1 - encoder.get();
     }
 
     private void setVoltage(double voltage) {

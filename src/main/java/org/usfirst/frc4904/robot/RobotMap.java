@@ -1,7 +1,6 @@
 package org.usfirst.frc4904.robot;
 
 import com.revrobotics.spark.SparkLowLevel;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,8 +11,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import org.photonvision.PhotonCamera;
-import org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
 import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
 import org.usfirst.frc4904.robot.subsystems.MotorSubsystem;
@@ -147,36 +146,36 @@ public class RobotMap {
     public RobotMap() {
         Component.navx = new AHRS(NavXComType.kMXP_SPI);
 
-        var flTurn = new CustomCANSparkMax(5, MotorType.kBrushless, false);
-        var frTurn = new CustomCANSparkMax(6, MotorType.kBrushless, false);
-        var blTurn = new CustomCANSparkMax(7, MotorType.kBrushless, false);
-        var brTurn = new CustomCANSparkMax(8, MotorType.kBrushless, false);
+        // var flTurn = new CustomCANSparkMax(5, MotorType.kBrushless, false);
+        // var frTurn = new CustomCANSparkMax(6, MotorType.kBrushless, false);
+        // var blTurn = new CustomCANSparkMax(7, MotorType.kBrushless, false);
+        // var brTurn = new CustomCANSparkMax(8, MotorType.kBrushless, false);
 
         Component.chassis = new SwerveSubsystem(
             new SwerveModule(
                 new CANTalonFX(1),
-                flTurn,
-                flTurn.getAbsoluteEncoder(),
-                new Translation2d(-1, 1)
-            ),
-            new SwerveModule(
                 new CANTalonFX(2),
-                frTurn,
-                frTurn.getAbsoluteEncoder(),
-                new Translation2d(1, 1)
-            ),
-            new SwerveModule(
-                new CANTalonFX(3),
-                blTurn,
-                blTurn.getAbsoluteEncoder(),
-                new Translation2d(-1, -1)
-            ),
-            new SwerveModule(
-                new CANTalonFX(4),
-                brTurn,
-                brTurn.getAbsoluteEncoder(),
-                new Translation2d(1, -1)
+                new DutyCycleEncoder(0),
+                new Translation2d(-1, 1)
             )
+            // new SwerveModule(
+            //     new CANTalonFX(2),
+            //     frTurn,
+            //     frTurn.getAbsoluteEncoder(),
+            //     new Translation2d(1, 1)
+            // ),
+            // new SwerveModule(
+            //     new CANTalonFX(3),
+            //     blTurn,
+            //     blTurn.getAbsoluteEncoder(),
+            //     new Translation2d(-1, -1)
+            // ),
+            // new SwerveModule(
+            //     new CANTalonFX(4),
+            //     brTurn,
+            //     brTurn.getAbsoluteEncoder(),
+            //     new Translation2d(1, -1)
+            // )
         );
 
         // Component.chassis.swerveDrive.setGyroOffset(new Rotation3d(0, 0, Units.degreesToRadians(180)));
