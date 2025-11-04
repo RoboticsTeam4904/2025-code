@@ -1,6 +1,5 @@
 package org.usfirst.frc4904.robot;
 
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
@@ -34,8 +33,6 @@ import org.usfirst.frc4904.standard.custom.motorcontrollers.SmartMotorController
 //import org.usfirst.frc4904.standard.subsystems.motor.SparkMaxMotorSubsystem;
 
 public class RobotMap {
-
-    public static SparkAbsoluteEncoder cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
     public static class Port {
 
@@ -155,12 +152,11 @@ public class RobotMap {
         var blTurn = new CustomCANSparkMax(7, MotorType.kBrushless, false);
         var brTurn = new CustomCANSparkMax(8, MotorType.kBrushless, false);
 
-        cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = flTurn.getAbsoluteEncoder();
         Component.chassis = new SwerveSubsystem(
             new SwerveModule(
                 new CANTalonFX(1),
                 flTurn,
-                cheesecoder_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+                flTurn.getAbsoluteEncoder(),
                 new Translation2d(-1, 1)
             ),
             new SwerveModule(
