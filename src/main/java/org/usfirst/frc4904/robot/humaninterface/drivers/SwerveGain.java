@@ -40,8 +40,13 @@ public class SwerveGain extends Driver { //ALL SWERVEGAIN JOYSTICKS OUTPUT FROM 
     public Translation2d getTrans() {
         double dead = HumanInterfaceConfig.JOYSTICK_DEADZONE;
 
+<<<<<<< HEAD
         double rawX = HumanInput.Driver.xyJoystick.getX();
         double rawY = HumanInput.Driver.xyJoystick.getY();
+=======
+        double rawX = -RobotMap.HumanInput.Driver.xyJoystick.getX();
+        double rawY = RobotMap.HumanInput.Driver.xyJoystick.getY();
+>>>>>>> 26e2791 (navx fixes)
 
         double mag = Math.hypot(rawX, rawY);
 
