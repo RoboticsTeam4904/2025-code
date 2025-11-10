@@ -42,8 +42,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Drive according to joystick inputs. {@code hypot(x, y)} should be <= 1.
-     * @param x X movement from [-1, 1]
-     * @param y Y movement from [-1, 1]
+     * @param trans X/Y movement from [-1, 1]
      * @param theta Turn speed from [-1, 1]
      */
     public void input(Translation2d trans, double theta) {
@@ -102,7 +101,6 @@ public class SwerveSubsystem extends SubsystemBase {
             double magnitude = normalized.getNorm();
             modules[i].moveTo(
                 magnitude,
-                // if magnitude is 0, this value is ignored
                 magnitude > 0 ? normalized.getAngle().getRotations() : 0
             );
         }

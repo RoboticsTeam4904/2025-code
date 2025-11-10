@@ -1,7 +1,7 @@
 package org.usfirst.frc4904.robot.humaninterface.drivers;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import org.usfirst.frc4904.robot.RobotMap;
+import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig;
 import org.usfirst.frc4904.standard.humaninput.Driver;
 
@@ -28,30 +28,25 @@ public class SwerveGain extends Driver { //ALL SWERVEGAIN JOYSTICKS OUTPUT FROM 
     }
 
     public double getX() {
-        double raw = RobotMap.HumanInput.Driver.xyJoystick.getX();
+        double raw = HumanInput.Driver.xyJoystick.getX();
         return scaleGain(raw, SPEED_EXP);
     }
 
     public double getY() {
-        double raw = RobotMap.HumanInput.Driver.xyJoystick.getY();
+        double raw = HumanInput.Driver.xyJoystick.getY();
         return scaleGain(raw, SPEED_EXP);
     }
 
     public Translation2d getTrans() {
         double dead = HumanInterfaceConfig.JOYSTICK_DEADZONE;
 
-        double rawX = RobotMap.HumanInput.Driver.xyJoystick.getX();
-        double rawY = RobotMap.HumanInput.Driver.xyJoystick.getY();
+        double rawX = HumanInput.Driver.xyJoystick.getX();
+        double rawY = HumanInput.Driver.xyJoystick.getY();
 
         double mag = Math.hypot(rawX, rawY);
 
         if (mag < dead) {
-            if (mag == 0) {
-                return Translation2d.kZero;
-            }
-
-            double scale = 0.01 / mag;
-            return new Translation2d(rawX * scale, rawY * scale);
+            return Translation2d.kZero;
         }
 
         double scaled = scaleGain((mag - dead) / (1 - dead), SPEED_EXP);
@@ -61,7 +56,7 @@ public class SwerveGain extends Driver { //ALL SWERVEGAIN JOYSTICKS OUTPUT FROM 
     }
 
     public double getTurnSpeed() {
-        double raw = RobotMap.HumanInput.Driver.turnJoystick.getX();
+        double raw = HumanInput.Driver.turnJoystick.getX();
         return scaleGain(raw, TURN_EXP);
     }
 }
