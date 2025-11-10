@@ -1,12 +1,9 @@
 package org.usfirst.frc4904.standard;
 
 import edu.wpi.first.hal.util.BoundaryException;
-import edu.wpi.first.math.geometry.Translation2d;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 /**
  * Common utilities
@@ -153,12 +150,5 @@ public class Util {
             }
             return true;
         };
-    }
-
-    /**
-     * Negates a translation supplier
-     */
-    public static Supplier<Translation2d> neg(Supplier<Translation2d> dealer) {
-        return () -> dealer.get().times(-1);
     }
 }

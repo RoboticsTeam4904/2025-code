@@ -12,7 +12,6 @@ import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.humaninterface.drivers.SwerveGain;
 import org.usfirst.frc4904.robot.humaninterface.operators.DefaultOperator;
 import org.usfirst.frc4904.standard.CommandRobotBase;
-import org.usfirst.frc4904.standard.Util;
 
 import java.util.function.Supplier;
 
@@ -52,7 +51,7 @@ public class Robot extends CommandRobotBase {
         //Component.elevator.encoder.reset();
 
         Component.chassis.setDefaultCommand(
-            Component.chassis.c_input(Util.neg(driver::getTrans), driver::getTurnSpeed)
+            Component.chassis.c_input(driver::getTrans, driver::getTurnSpeed)
         );
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);
