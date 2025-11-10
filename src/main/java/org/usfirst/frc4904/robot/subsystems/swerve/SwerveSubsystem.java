@@ -134,7 +134,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Drive according to inputs provided by the suppliers.
      * <p>
-     * See {@link #input(double, double, double)}
+     * See {@link #input(Translation2d, double)}
      */
     public Command c_input(Supplier<Translation2d> trans, DoubleSupplier theta) {
         return run(() -> input(trans.get(), theta.getAsDouble()));
