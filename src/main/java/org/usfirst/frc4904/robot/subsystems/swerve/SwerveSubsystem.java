@@ -136,7 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Command c_driveRobotRelative(double x, double y, double theta) {
-        return run(() -> driveRobotRelative(x, y, theta));
+        return c_driveRobotRelative(new Translation2d(x, y), theta);
     }
 
     /**
