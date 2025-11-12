@@ -1,6 +1,5 @@
 package org.usfirst.frc4904.robot;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
@@ -46,11 +45,11 @@ public class Auton {
                     @Override
                     public void execute() {
                         // IN BIZARRO WORLD, LEFT IS POSITIVE, FORWARD IS POS
-                        Component.chassis.drive(new ChassisSpeeds(0.4, 0, 0));
+                        Component.chassis.driveRobotRelative(0.4, 0, 0);
                     }
                 }
             ),
-            new InstantCommand(() -> Component.chassis.drive(new ChassisSpeeds(0, 0, 0))),
+            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0)),
             Component.vision.c_align(new int[] { 10, 21 }, -1),
             Component.elevator.c_outtakeAtPosition(ElevatorSubsystem.Position.L3),
             Component.elevator.c_gotoPosition(ElevatorSubsystem.Position.INTAKE)
@@ -65,11 +64,11 @@ public class Auton {
                 new Command() {
                     @Override
                     public void execute() {
-                        Component.chassis.drive(new ChassisSpeeds(-0.5, 0, 0));
+                        Component.chassis.driveRobotRelative(-0.5, 0, 0);
                     }
                 }
             ),
-            new InstantCommand(() -> Component.chassis.drive(new ChassisSpeeds(0, 0, 0)))
+            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0))
         );
     }
 
@@ -81,11 +80,11 @@ public class Auton {
                 new Command() {
                     @Override
                     public void execute() {
-                        Component.chassis.drive(new ChassisSpeeds(0.5, 0, 0));
+                        Component.chassis.driveRobotRelative(0.5, 0, 0);
                     }
                 }
             ),
-            new InstantCommand(() -> Component.chassis.drive(new ChassisSpeeds(0, 0, 0)))
+            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0))
         );
     }
 
@@ -106,11 +105,11 @@ public class Auton {
                 new Command() {
                     @Override
                     public void execute() {
-                        Component.chassis.drive(new ChassisSpeeds(-0.4 / Math.sqrt(3), -0.4 * side, 0));
+                        Component.chassis.driveRobotRelative(-0.4 / Math.sqrt(3), -0.4 * side, 0);
                     }
                 }
             ),
-            new InstantCommand(() -> Component.chassis.drive(new ChassisSpeeds(0, 0, 0))),
+            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0)),
             Component.vision.c_align(new int[] { 9, 11, 20, 22 }, -1),
             Component.elevator.c_outtakeAtPosition(ElevatorSubsystem.Position.L2),
             Component.elevator.c_gotoPosition(ElevatorSubsystem.Position.INTAKE)

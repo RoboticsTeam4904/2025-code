@@ -106,6 +106,10 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    public void driveRobotRelative(double x, double y, double theta) {
+        driveRobotRelative(new Translation2d(x, y), theta);
+    }
+
     @Override
     public void periodic() {
         for (var module : modules) module.periodic();
@@ -131,6 +135,10 @@ public class SwerveSubsystem extends SubsystemBase {
         return run(() -> driveRobotRelative(translation, theta));
     }
 
+    public Command c_driveRobotRelative(double x, double y, double theta) {
+        return run(() -> driveRobotRelative(x, y, theta));
+    }
+
     /**
      * Drive according to inputs provided by the suppliers.
      * <p>
@@ -145,10 +153,6 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     // TODO remove
-
-    public Command drive(ChassisSpeeds s) {
-        return new NoOp();
-    }
 
     public Command setMotorBrake(Boolean brake) {
         return new NoOp();

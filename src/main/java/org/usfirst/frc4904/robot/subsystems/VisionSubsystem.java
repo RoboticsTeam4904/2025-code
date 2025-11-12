@@ -95,7 +95,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     // used to estimate position when we can't see the tag
     private double lastTime;
-    private ChassisSpeeds lastSpeed = null;
+    private Transform2d lastSpeed = null;
 
     // camera positions relative to robot center
     private final Transform2d[] cameraOffsets;
@@ -156,9 +156,9 @@ public class VisionSubsystem extends SubsystemBase {
             double deltaTime = currentTime - lastTime;
             desiredOffset = desiredOffset.plus(
                 new Transform2d(
-                    -lastSpeed.vxMetersPerSecond * deltaTime,
-                    -lastSpeed.vyMetersPerSecond * deltaTime,
-                    new Rotation2d(-lastSpeed.omegaRadiansPerSecond * deltaTime)
+                    -lastSpeed.getX() * deltaTime,
+                    -lastSpeed.getY() * deltaTime,
+                    new Rotation2d(-lastSpeed.getRotation().getRadians() * deltaTime)
                 )
             );
         } else {
@@ -177,19 +177,14 @@ public class VisionSubsystem extends SubsystemBase {
         ySpeed = Util.clamp(ySpeed, -MAX_LINEAR_SPEED, MAX_LINEAR_SPEED);
         rotSpeed = Util.clamp(rotSpeed, -MAX_ROT_SPEED, MAX_ROT_SPEED);
 
-        // convert to robot relative speeds
-        ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
-            xSpeed,
-            ySpeed,
-            rotSpeed,
-            Rotation2d.kZero
-        );
-
         // command swerve drive
-        Component.chassis.drive(relativeSpeeds);
+        Component.chassis.driveRobotRelative(xSpeed, ySpeed, rotSpeed);
 
         lastTime = currentTime;
-        lastSpeed = relativeSpeeds;
+        lastSpeed = new Transform2d(
+            new Translation2d(xSpeed, ySpeed),
+            Rotation2d.fromRotations(rotSpeed)
+        );
 
         // log positioning data
         System.out.printf(
@@ -338,7 +333,7 @@ public class VisionSubsystem extends SubsystemBase {
         targetTagOptions = null;
         targetTagId = null;
         desiredOffset = null;
-        Component.chassis.drive(new ChassisSpeeds(0, 0, 0));
+        Component.chassis.driveRobotRelative(0, 0, 0);
 
         System.out.println("Positioning ended" + (reason != null ? " - " + reason : ""));
 
