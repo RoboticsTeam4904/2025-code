@@ -2,7 +2,6 @@ package org.usfirst.frc4904.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.usfirst.frc4904.robot.RobotMap.Component;
@@ -42,13 +41,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Drive according to joystick inputs. {@code hypot(x, y)} should be <= 1.
-     * @param trans X/Y movement from [-1, 1]
+     * @param translation X/Y movement from [-1, 1]
      * @param theta Turn speed from [-1, 1]
      */
-    public void input(Translation2d trans, double theta) {
+    public void input(Translation2d translation, double theta) {
         // System.out.println("x: " + x + " y: " + y + " theta: " + theta);
 
-        Translation2d scaled = trans.times(SwerveConstants.LIN_SPEED);
+        Translation2d scaled = translation.times(SwerveConstants.LIN_SPEED);
         driveFieldRelative(scaled, theta * SwerveConstants.ROT_SPEED);
     }
 
@@ -102,6 +101,10 @@ public class SwerveSubsystem extends SubsystemBase {
         driveRobotRelative(new Translation2d(x, y), theta);
     }
 
+    public void stop() {
+        driveRobotRelative(0, 0, 0);
+    }
+
     @Override
     public void periodic() {
         for (var module : modules) module.periodic();
@@ -110,11 +113,28 @@ public class SwerveSubsystem extends SubsystemBase {
     /// COMMANDS
 
     /**
+     * Stop the wheels.
+     */
+    public Command c_stop() {
+        return runOnce(this::stop);
+    }
+
+    /**
      * Hold a field-relative movement speed and rotation speed.
      * <p>
      * See {@link #driveFieldRelative(Translation2d, double)}
      */
     public Command c_driveFieldRelative(Translation2d translation, double theta) {
+        return run(() -> driveFieldRelative(translation, theta));
+    }
+
+    /**
+     * Hold a field-relative movement speed and rotation speed.
+     * <p>
+     * See {@link #driveFieldRelative(Translation2d, double)}
+     */
+    public Command c_driveFieldRelative(double x, double y, double theta) {
+        Translation2d translation = new Translation2d(x, y);
         return run(() -> driveFieldRelative(translation, theta));
     }
 
@@ -127,8 +147,14 @@ public class SwerveSubsystem extends SubsystemBase {
         return run(() -> driveRobotRelative(translation, theta));
     }
 
+    /**
+     * Hold a robot-relative movement speed and rotation speed.
+     * <p>
+     * See {@link #driveRobotRelative(Translation2d, double)}
+     */
     public Command c_driveRobotRelative(double x, double y, double theta) {
-        return c_driveRobotRelative(new Translation2d(x, y), theta);
+        Translation2d translation = new Translation2d(x, y);
+        return run(() -> driveRobotRelative(translation, theta));
     }
 
     /**

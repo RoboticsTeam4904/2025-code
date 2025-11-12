@@ -39,52 +39,29 @@ public class Auton {
     public static Command c_jankStraightCoral() {
         return new SequentialCommandGroup(
             new WaitCommand(5),
-            new ParallelDeadlineGroup(
-                new WaitCommand(2),
-                new Command() {
-                    @Override
-                    public void execute() {
-                        // IN BIZARRO WORLD, LEFT IS POSITIVE, FORWARD IS POS
-                        Component.chassis.driveRobotRelative(0.4, 0, 0);
-                    }
-                }
-            ),
-            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0)),
+            Component.chassis.c_driveRobotRelative(0.4, 0, 0).withTimeout(2),
+            Component.chassis.c_stop(),
             Component.vision.c_align(new int[] { 10, 21 }, -1),
             Component.elevator.c_outtakeAtPosition(ElevatorSubsystem.Position.L3),
             Component.elevator.c_gotoPosition(ElevatorSubsystem.Position.INTAKE)
         );
     }
 
+    // actually moves backwards - robot must be placed physically backwards on the field
     public static Command c_jankStraight() {
         return new SequentialCommandGroup(
             new WaitCommand(12),
-            new ParallelDeadlineGroup(
-                new WaitCommand(2),
-                new Command() {
-                    @Override
-                    public void execute() {
-                        Component.chassis.driveRobotRelative(-0.5, 0, 0);
-                    }
-                }
-            ),
-            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0))
+            Component.chassis.c_driveRobotRelative(-0.5, 0, 0).withTimeout(2),
+            Component.chassis.c_stop()
         );
     }
 
+    // actually moves forwards
     public static Command c_jankReverse() {
         return new SequentialCommandGroup(
-            new WaitCommand(3),
-            new ParallelDeadlineGroup(
-                new WaitCommand(12),
-                new Command() {
-                    @Override
-                    public void execute() {
-                        Component.chassis.driveRobotRelative(0.5, 0, 0);
-                    }
-                }
-            ),
-            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0))
+            new WaitCommand(12),
+            Component.chassis.c_driveRobotRelative(0.5, 0, 0).withTimeout(2),
+            Component.chassis.c_stop()
         );
     }
 
@@ -97,19 +74,11 @@ public class Auton {
     }
 
     /** @param side 1 = robot-relative left, -1 = robot-relative right */
-    public static Command c_jankSideCoral(int side) {
+    private static Command c_jankSideCoral(int side) {
         return new SequentialCommandGroup(
             new WaitCommand(3),
-            new ParallelDeadlineGroup(
-                new WaitCommand(1.5),
-                new Command() {
-                    @Override
-                    public void execute() {
-                        Component.chassis.driveRobotRelative(-0.4 / Math.sqrt(3), -0.4 * side, 0);
-                    }
-                }
-            ),
-            new InstantCommand(() -> Component.chassis.driveRobotRelative(0, 0, 0)),
+            Component.chassis.c_driveRobotRelative(-0.4 / Math.sqrt(3), -0.4 * side, 0).withTimeout(1.5),
+            Component.chassis.c_stop(),
             Component.vision.c_align(new int[] { 9, 11, 20, 22 }, -1),
             Component.elevator.c_outtakeAtPosition(ElevatorSubsystem.Position.L2),
             Component.elevator.c_gotoPosition(ElevatorSubsystem.Position.INTAKE)

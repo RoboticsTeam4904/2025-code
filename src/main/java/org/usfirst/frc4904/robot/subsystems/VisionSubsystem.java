@@ -1,8 +1,10 @@
 package org.usfirst.frc4904.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -10,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -18,7 +19,10 @@ import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.standard.Util;
 import org.usfirst.frc4904.standard.commands.WaitWhileCommand;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 /** Sponsored by Claude™ 3.7 Sonnet by Anthropic® */
 public class VisionSubsystem extends SubsystemBase {
@@ -181,10 +185,7 @@ public class VisionSubsystem extends SubsystemBase {
         Component.chassis.driveRobotRelative(xSpeed, ySpeed, rotSpeed);
 
         lastTime = currentTime;
-        lastSpeed = new Transform2d(
-            new Translation2d(xSpeed, ySpeed),
-            Rotation2d.fromRotations(rotSpeed)
-        );
+        lastSpeed = Util.transform(xSpeed, ySpeed, rotSpeed);
 
         // log positioning data
         System.out.printf(
@@ -333,7 +334,7 @@ public class VisionSubsystem extends SubsystemBase {
         targetTagOptions = null;
         targetTagId = null;
         desiredOffset = null;
-        Component.chassis.driveRobotRelative(0, 0, 0);
+        Component.chassis.stop();
 
         System.out.println("Positioning ended" + (reason != null ? " - " + reason : ""));
 

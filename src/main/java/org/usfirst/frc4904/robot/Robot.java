@@ -51,7 +51,7 @@ public class Robot extends CommandRobotBase {
         //Component.elevator.encoder.reset();
 
         Component.chassis.setDefaultCommand(
-            Component.chassis.c_input(driver::getTrans, driver::getTurnSpeed)
+            Component.chassis.c_input(driver::getTranslation, driver::getTurnSpeed)
         );
 
         // Component.lights.flashColor(LightSubsystem.Color.ENABLED);

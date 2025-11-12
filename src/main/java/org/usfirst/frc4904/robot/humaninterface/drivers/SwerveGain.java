@@ -37,7 +37,7 @@ public class SwerveGain extends Driver { //ALL SWERVEGAIN JOYSTICKS OUTPUT FROM 
         return scaleGain(raw, SPEED_EXP);
     }
 
-    public Translation2d getTrans() {
+    public Translation2d getTranslation() {
         double dead = HumanInterfaceConfig.JOYSTICK_DEADZONE;
 
         double rawX = HumanInput.Driver.xyJoystick.getX();

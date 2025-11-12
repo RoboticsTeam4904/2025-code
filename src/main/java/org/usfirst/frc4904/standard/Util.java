@@ -1,6 +1,8 @@
 package org.usfirst.frc4904.standard;
 
 import edu.wpi.first.hal.util.BoundaryException;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
@@ -150,5 +152,12 @@ public class Util {
             }
             return true;
         };
+    }
+
+    /**
+     * Utility for creating Transform2D instances
+     */
+    public static Transform2d transform(double x, double y, double rotations) {
+        return new Transform2d(x, y, Rotation2d.fromRotations(rotations));
     }
 }
