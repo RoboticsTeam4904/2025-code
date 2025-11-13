@@ -23,7 +23,7 @@ public class GoogleTagManager {
         client = HttpClient.newHttpClient();
     }
 
-    public List<Tag> populateTags() {
+    public List<Tag> getTags() {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("dauntless.local:8080/api/tags"))
             .GET()

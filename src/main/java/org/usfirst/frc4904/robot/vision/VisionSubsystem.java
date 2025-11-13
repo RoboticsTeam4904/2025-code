@@ -266,7 +266,7 @@ public class VisionSubsystem extends SubsystemBase {
      * @return A list of possible targets
      */
     List<Tag> getResults() {
-        List<Tag> results = gtm.populateTags();
+        List<Tag> results = gtm.getTags();
 
         results.sort(Comparator.comparingDouble(result -> {
             Translation3d transform = result.pos();
