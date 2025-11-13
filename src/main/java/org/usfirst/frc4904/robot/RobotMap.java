@@ -12,14 +12,14 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
-import org.photonvision.PhotonCamera;
 import org.usfirst.frc4904.robot.humaninterface.HumanInterfaceConfig;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
 import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
 import org.usfirst.frc4904.robot.subsystems.MotorSubsystem;
-import org.usfirst.frc4904.robot.subsystems.VisionSubsystem;
 import org.usfirst.frc4904.robot.subsystems.swerve.SwerveModule;
 import org.usfirst.frc4904.robot.subsystems.swerve.SwerveSubsystem;
+import org.usfirst.frc4904.robot.vision.GoogleTagManager;
+import org.usfirst.frc4904.robot.vision.VisionSubsystem;
 import org.usfirst.frc4904.standard.custom.CustomEncoder;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandXbox;
@@ -101,9 +101,6 @@ public class RobotMap {
 
         public static CANTalonFX climberMotor;
 
-        public static PhotonCamera cameraLeft;
-        public static PhotonCamera cameraRight;
-
         public static AddressableLED ledStrip;
     }
 
@@ -181,13 +178,8 @@ public class RobotMap {
 
         // Component.chassis.swerveDrive.setGyroOffset(new Rotation3d(0, 0, Units.degreesToRadians(180)));
 
-        Component.cameraLeft = new PhotonCamera("dauntless-left");
-        Component.cameraRight = new PhotonCamera("dauntless-right");
         Component.vision = new VisionSubsystem(
-            new PhotonCamera[] {
-                Component.cameraLeft,
-                Component.cameraRight
-            },
+            new GoogleTagManager(),
             new Transform2d[] {
                 new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(-10.6), Rotation2d.kZero),
                 new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(10.6), Rotation2d.kZero)

@@ -3,7 +3,7 @@ package org.usfirst.frc4904.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
-import org.usfirst.frc4904.robot.subsystems.VisionSubsystem.TagGroup;
+import org.usfirst.frc4904.robot.vision.VisionSubsystem.TagGroup;
 
 public class Auton {
 

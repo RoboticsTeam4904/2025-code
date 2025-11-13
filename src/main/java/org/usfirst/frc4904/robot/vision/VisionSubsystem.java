@@ -1,10 +1,10 @@
-package org.usfirst.frc4904.robot.subsystems;
+package org.usfirst.frc4904.robot.vision;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -12,14 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 import org.usfirst.frc4904.robot.RobotMap.Component;
+import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
+import org.usfirst.frc4904.robot.vision.GoogleTagManager.Tag;
 import org.usfirst.frc4904.standard.Util;
 import org.usfirst.frc4904.standard.commands.WaitWhileCommand;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -76,9 +74,7 @@ public class VisionSubsystem extends SubsystemBase {
     private final double CANT_SEE_TIMEOUT = 1; // give up if we cant see the april tag for this many seconds
     private final double TOTAL_TIMEOUT = 5; // always give up after this many seconds
 
-    private record CameraTag(PhotonTrackedTarget tag, int cameraIndex) {}
-
-    private final PhotonCamera[] photonCameras;
+    private final GoogleTagManager gtm;
 
     // pid controllers
     private final PIDController positionController;
@@ -111,8 +107,8 @@ public class VisionSubsystem extends SubsystemBase {
      * @param cameraOffsets The transforms from the camera to the robot center.
      *                      -X is towards the front of the robot.
      */
-    public VisionSubsystem(PhotonCamera[] photonCameras, Transform2d[] cameraOffsets) {
-        this.photonCameras = photonCameras;
+    public VisionSubsystem(GoogleTagManager gtm, Transform2d[] cameraOffsets) {
+        this.gtm = gtm;
         this.cameraOffsets = cameraOffsets;
 
         // initialize pid controllers
@@ -137,12 +133,12 @@ public class VisionSubsystem extends SubsystemBase {
 
         double currentTime = Timer.getFPGATimestamp();
 
-        CameraTag target;
+        Tag target;
 
         if (targetTagId == null) {
             // find best tag out of possible tags and target it
             target = getBestTargetId(targetTagOptions);
-            targetTagId = target != null ? target.tag.fiducialId : null;
+            targetTagId = target != null ? target.id() : null;
         } else {
             target = getTarget(targetTagId);
         }
@@ -228,8 +224,8 @@ public class VisionSubsystem extends SubsystemBase {
      * @param tagIds The IDs of the April Tags to target
      * @return The ID of the best April Tag, or null if none were found
      */
-    private CameraTag getBestTargetId(int[] tagIds) {
-        List<CameraTag> results = getResults();
+    private Tag getBestTargetId(int[] tagIds) {
+        List<Tag> results = getResults();
 
         if (results.isEmpty()) return null;
 
@@ -241,7 +237,7 @@ public class VisionSubsystem extends SubsystemBase {
         // find best tag in the possible tag options
         for (var target : results) {
             for (int tagId : tagIds) {
-                if (tagId == target.tag.fiducialId) {
+                if (tagId == target.id()) {
                     return target;
                 }
             }
@@ -254,11 +250,11 @@ public class VisionSubsystem extends SubsystemBase {
      * Get a PhotonVision target for an April Tag matching a certain ID
      *
      * @param tagId The ID of the tag to look for
-     * @return A {@link CameraTag} or {@code null} if no April Tag was found
+     * @return A {@link Tag} or {@code null} if no April Tag was found
      */
-    CameraTag getTarget(int tagId) {
+    Tag getTarget(int tagId) {
         for (var target : getResults()) {
-            if (tagId == target.tag.fiducialId) {
+            if (tagId == target.id()) {
                 return target;
             }
         }
@@ -269,30 +265,11 @@ public class VisionSubsystem extends SubsystemBase {
     /**
      * @return A list of possible targets
      */
-    List<CameraTag> getResults() {
-        List<CameraTag> results = new ArrayList<>();
-
-        for (int i = 0; i < photonCameras.length; i++) {
-            List<PhotonPipelineResult> unreadResults = photonCameras[i].getAllUnreadResults();
-            if (unreadResults.isEmpty()) continue;
-
-            double lastCaptureTime = 0;
-            for (var result : unreadResults) {
-                lastCaptureTime = Math.max(lastCaptureTime, result.getTimestampSeconds());
-            }
-
-            for (var result : unreadResults) {
-                // discard results that are more than 0.1 seconds older than the latest result
-                if (lastCaptureTime - result.getTimestampSeconds() > 0.1) continue;
-
-                for (var target : result.getTargets()) {
-                    results.add(new CameraTag(target, i));
-                }
-            }
-        }
+    List<Tag> getResults() {
+        List<Tag> results = gtm.populateTags();
 
         results.sort(Comparator.comparingDouble(result -> {
-            Transform3d transform = result.tag.getBestCameraToTarget();
+            Translation3d transform = result.pos();
             return Math.pow(transform.getX(), 2) + Math.pow(transform.getY(), 2);
         }));
 
@@ -350,16 +327,16 @@ public class VisionSubsystem extends SubsystemBase {
      * @param target The target to calculate alignment to
      * @return The transform from current position to desired position
      */
-    private Transform2d calculatePositionError(CameraTag target) {
-        Transform3d rawOffset = target.tag.getBestCameraToTarget();
+    private Transform2d calculatePositionError(Tag target) {
+        Translation3d rawOffset = target.pos();
 
         Transform2d targetOffset = new Transform2d(
             rawOffset.getX(),
             rawOffset.getY(),
-            rawOffset.getRotation().toRotation2d()
+            target.rot()
         );
 
-        Transform2d cameraOffset = cameraOffsets[target.cameraIndex];
+        Transform2d cameraOffset = cameraOffsets[target.camera()];
 
         // calculate transform from robot to the tag
         Transform2d robotToTarget = new Transform2d(
