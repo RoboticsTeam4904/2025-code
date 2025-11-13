@@ -31,10 +31,17 @@ public class GoogleTagManager {
 
         List<Tag> tags = new ArrayList<>();
 
+        String json;
+
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String json = response.body();
+            json = response.body();
+        } catch (Exception e) {
+            System.out.println("google tag manager fetching error!!!");
+            return tags;
+        }
 
+        try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(json);
 
@@ -50,8 +57,8 @@ public class GoogleTagManager {
 
                 tags.add(tag);
             }
-        } catch (IOException | InterruptedException e) {
-            System.out.println("google tag manager error!!!");
+        } catch (Exception e) {
+            System.out.println("google tag manager parsing error!!!");
         }
 
         return tags;
