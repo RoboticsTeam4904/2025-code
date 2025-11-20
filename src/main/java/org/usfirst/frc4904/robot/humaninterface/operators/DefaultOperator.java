@@ -1,6 +1,5 @@
 package org.usfirst.frc4904.robot.humaninterface.operators;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.usfirst.frc4904.robot.RobotMap;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
@@ -29,9 +28,9 @@ public class DefaultOperator extends Operator {
         joystick.button9.onTrue(Component.elevator.c_gotoPosition(ElevatorSubsystem.Position.L3));
 
         /// INTAKE
-        joystick.button11.onTrue(Component.elevator.c_intakeRaw());
+        joystick.button11.onTrue(Component.elevator.c_intake());
         /// RAMP OUTTAKE
-        joystick.button12.onTrue(Component.elevator.c_rampOuttakeRaw());
+        joystick.button12.onTrue(Component.elevator.c_rampOuttake());
 
         /// MANUAL RAMP CONTROL
         joystick.button3.onTrue(Component.ramp.c_forward());
@@ -50,15 +49,9 @@ public class DefaultOperator extends Operator {
         turnJoystick.button2.whileTrue(Component.vision.c_align(TagGroup.ANY, 1));
 
         /// ODOMETRY RESETTING
-        xyJoystick.button1.onTrue(new InstantCommand(() -> Component.chassis.resetOdometry()));
+        xyJoystick.button1.onTrue(c_resetOdometry());
 
         /// ELEVATOR ENCODER RESETTING
-        var elevatorEncoderCommand = new InstantCommand(() -> Component.elevator.setVoltage(-3, true));
-        elevatorEncoderCommand.addRequirements(Component.elevator);
-        joystick.button10.onTrue(elevatorEncoderCommand);
-        joystick.button10.onFalse(new InstantCommand(() -> {
-            Component.elevator.setVoltage(0);
-            Component.elevatorEncoder.reset();
-        }));
+        joystick.button10.whileTrue(c_manualElevatorZero());
     }
 }
