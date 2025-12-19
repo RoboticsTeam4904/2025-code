@@ -14,7 +14,12 @@ import java.util.function.BooleanSupplier;
 /**
  * Common utilities
  */
-public class Util {
+public final class Util {
+
+    private Util() {
+        throw new UnsupportedOperationException("Cannot instantiate Util class.");
+    }
+
     /**
      * Returns true if {@code value} is less than {@code epsilon}. This is useful
      * for floating point numbers, whose arithmetic operations tend to introduce
