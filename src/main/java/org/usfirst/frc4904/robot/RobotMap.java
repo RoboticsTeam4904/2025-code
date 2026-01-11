@@ -13,7 +13,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
-import org.usfirst.frc4904.robot.subsystems.LightSubsystem;
 import org.usfirst.frc4904.robot.subsystems.MotorSubsystem;
 import org.usfirst.frc4904.robot.swerve.SwerveModule;
 import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
@@ -87,7 +86,7 @@ public class RobotMap {
         public static MotorSubsystem outtake;
         public static MotorSubsystem climber;
         public static VisionSubsystem vision;
-        public static LightSubsystem lights;
+    
 
         // motors
         public static CustomCANSparkMax rampMotor;
@@ -221,13 +220,7 @@ public class RobotMap {
             Component.elevatorEncoder
         );
 
-        Component.ledStrip = new AddressableLED(Port.PWM.LED_STRIP);
-        Component.lights = new LightSubsystem(
-            Component.ledStrip,
-            107,
-            new int[] { 20, 37, 34, 16 },
-            new boolean[] { false, true, false, true }
-        );
+    
 
         HumanInput.Driver.xyJoystick = new CustomCommandJoystick(
             Port.HumanInput.xyJoystickPort,
