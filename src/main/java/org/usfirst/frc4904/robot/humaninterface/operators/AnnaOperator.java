@@ -3,7 +3,6 @@ package org.usfirst.frc4904.robot.humaninterface.operators;
 import org.usfirst.frc4904.robot.RobotMap.Component;
 import org.usfirst.frc4904.robot.RobotMap.HumanInput;
 import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem.Position;
-import org.usfirst.frc4904.robot.vision.VisionSubsystem.TagGroup;
 import org.usfirst.frc4904.standard.humaninput.Operator;
 
 public class AnnaOperator extends Operator {
@@ -42,10 +41,7 @@ public class AnnaOperator extends Operator {
         joystick.button3.onFalse(Component.outtake.c_stop());
         joystick.button5.onFalse(Component.outtake.c_stop());
 
-        /// VISION
-        turnJoystick.button1.whileTrue(Component.vision.c_align(TagGroup.ANY, -1));
-        turnJoystick.button2.whileTrue(Component.vision.c_align(TagGroup.ANY, 1));
-
+      
         /// ODOMETRY RESETTING
         xyJoystick.button1.onTrue(c_resetOdometry());
 

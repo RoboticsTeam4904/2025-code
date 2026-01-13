@@ -16,8 +16,6 @@ import org.usfirst.frc4904.robot.subsystems.ElevatorSubsystem;
 import org.usfirst.frc4904.robot.subsystems.MotorSubsystem;
 import org.usfirst.frc4904.robot.swerve.SwerveModule;
 import org.usfirst.frc4904.robot.swerve.SwerveSubsystem;
-import org.usfirst.frc4904.robot.vision.GoogleTagManager;
-import org.usfirst.frc4904.robot.vision.VisionSubsystem;
 import org.usfirst.frc4904.standard.custom.CustomEncoder;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandJoystick;
 import org.usfirst.frc4904.standard.custom.controllers.CustomCommandXbox;
@@ -85,8 +83,7 @@ public class RobotMap {
         public static ElevatorSubsystem elevator;
         public static MotorSubsystem outtake;
         public static MotorSubsystem climber;
-        public static VisionSubsystem vision;
-    
+        
 
         // motors
         public static CustomCANSparkMax rampMotor;
@@ -176,15 +173,6 @@ public class RobotMap {
 
         // Component.chassis.swerveDrive.setGyroOffset(new Rotation3d(0, 0, Units.degreesToRadians(180)));
 
-        Component.vision = new VisionSubsystem(
-            new GoogleTagManager(),
-            new Transform2d[] {
-                new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(-10.6), Rotation2d.kZero),
-                new Transform2d(Units.inchesToMeters(8), Units.inchesToMeters(10.6), Rotation2d.kZero)
-
-                // new Transform2d(Units.inchesToMeters(0), Units.inchesToMeters(0), Rotation2d.kZero)
-            }
-        );
 
         Component.rampMotor = new CustomCANSparkMax(
             Port.CANMotor.RAMP,

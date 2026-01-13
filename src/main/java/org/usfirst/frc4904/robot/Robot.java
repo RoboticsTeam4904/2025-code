@@ -26,7 +26,7 @@ public class Robot extends CommandRobotBase {
         public static final boolean FLIP_SIDE = false;
 
         /** The auton to run */
-        public static Supplier<Command> COMMAND = Auton::c_jankRightCoral;
+        
     }
 
     private final SwerveGain driver = new SwerveGain();
@@ -62,8 +62,7 @@ public class Robot extends CommandRobotBase {
     @Override
     public void teleopExecute() {
         // TODO maybe unnecessary
-        Component.vision.periodic();
-
+        
         double y = RobotMap.HumanInput.Operator.joystick.getY();
 
         if (Math.abs(y) >= 0.05) {
@@ -102,7 +101,7 @@ public class Robot extends CommandRobotBase {
         // timer.reset();
         // timer.start();
 
-        AutonConfig.COMMAND.get().schedule();
+    
     }
 
     @Override
@@ -112,7 +111,7 @@ public class Robot extends CommandRobotBase {
 
     @Override
     public void disabledInitialize() {
-        Component.vision.stopPositioning("Robot disabled", false);
+       
 
         Component.chassis.setMotorBrake(false);
         // Component.lights.flashColor(LightSubsystem.Color.DISABLED);
