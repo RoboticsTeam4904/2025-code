@@ -16,7 +16,15 @@ import org.usfirst.frc4904.standard.CommandRobotBase;
 import java.util.function.Supplier;
 
 public class Robot extends CommandRobotBase {
-
+    private robotcontainer cont;
+    
+    public void RobotInit(){
+        cont = new robotcontainer(true);
+        if (cont == null){
+            System.out.println("aalalkkpjsdjknbh");
+        }
+    }
+     
     public static class AutonConfig {
 
         /** Whether to run auton at all */
@@ -145,5 +153,17 @@ public class Robot extends CommandRobotBase {
         //     lastLogTime = Timer.getFPGATimestamp();
         //     System.out.printf("ELEVATOR ENCODER: %.4f%n", Component.elevatorEncoder.get());
         // }
+    }
+
+    @Override
+    public void simulationInit(){
+     cont = new robotcontainer(true);
+    }
+    @Override
+    public void simulationPeriodic(){
+        if (cont == null){
+            System.out.println("loloolooloo");
+        }
+        cont.sim.periodic();
     }
 }
