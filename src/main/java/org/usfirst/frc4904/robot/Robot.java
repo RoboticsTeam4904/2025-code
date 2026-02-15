@@ -20,9 +20,7 @@ public class Robot extends CommandRobotBase {
     
     public void RobotInit(){
         cont = new robotcontainer(true);
-        if (cont == null){
-            System.out.println("aalalkkpjsdjknbh");
-        }
+        
     }
      
     public static class AutonConfig {
@@ -158,12 +156,13 @@ public class Robot extends CommandRobotBase {
     @Override
     public void simulationInit(){
      cont = new robotcontainer(true);
+     System.out.println("set");
     }
     @Override
     public void simulationPeriodic(){
-        if (cont == null){
-            System.out.println("loloolooloo");
-        }
+       
+      // System.out.println(cont);
         cont.sim.periodic();
     }
 }
+//wrror with cont latest error hunt

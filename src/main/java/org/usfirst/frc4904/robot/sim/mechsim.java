@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.usfirst.frc4904.robot.subsystems.armsubsystem;
 import org.usfirst.frc4904.robot.subsystems.arm.armstate;
+import org.usfirst.frc4904.robot.subsystems.arm.io.armsimio;
 
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -22,6 +23,7 @@ private final armsubsystem armsubsystem;
 
 public mechsim(armsubsystem arms){
     this.armsubsystem = arms;
+    
 
     this.panel = new Mechanism2d(100, 100);
     this.root = panel.getRoot("arm", 20, 10);
